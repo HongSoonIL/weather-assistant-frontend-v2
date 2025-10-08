@@ -3,6 +3,7 @@ import './App.css';
 import Home from './screens/Home/Home';
 import Chat from './screens/Chat/Chat';
 import VoiceInput from './screens/VoiceInput/VoiceInput';
+import KnockDetector from './screens/VoiceInput/KnockDetector'; 
 
 function App() {
   const [view, setView] = useState('home');
@@ -397,10 +398,18 @@ function App() {
     await sendMessage(text, false);
   };
 
-  const handleVoiceInput = () => {
+  const handleVoiceInput = () => { // 음성인식 화면으로 전환하는 함수
     setPreviousView(view); // 현재 화면을 이전 화면으로 저장
     setView('listening');
   };
+
+  // KnockDetector가 호출할 onKnock 함수를 정의합니다.
+  // 이 함수가 바로 음성인식을 켜는 역할을 합니다.
+  const onKnock = () => {
+    console.log('App.js: 노크 신호를 받아 음성인식을 시작합니다.');
+    handleVoiceInput();
+  };
+
 
   // 기존 useEffect들 아래에 이 코드를 추가하세요
 
@@ -430,6 +439,7 @@ useEffect(() => {
 
   return (
     <div className={`app ${view}`}>
+      <KnockDetector onKnock={onKnock} />
       {view === 'home' && (
         <Home 
           time={time}
