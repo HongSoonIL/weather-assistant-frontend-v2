@@ -1,0 +1,205 @@
+/* Camera Cautions Container */
+.app-container.camera-cautions {
+  position: relative;
+  /* width: 100%; - 제거 (App.css에서 제어) */
+  /* height: 100%; - 제거 (App.css에서 제어) */
+  background: #5D5466;
+  overflow: hidden;
+
+  /* === FIX: App.css의 flex 및 padding 오버라이드 === */
+  padding: 0; /* padding 리셋 */
+  /* === END FIX === */
+}
+
+/* Status Bar - iPhone */
+.app-container.camera-cautions .camera-status-bar {
+  position: absolute;
+  width: 100%;
+  height: 59px;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  /* 상단 safe-area는 App.css의 padding-top이 처리하도록 top: 0 유지 */
+  top: env(safe-area-inset-top, 0px);
+}
+.app-container.camera-cautions .camera-time-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  top: 33.96%;
+  bottom: 25.3%;
+  font-family: 'SF Pro', sans-serif;
+  font-style: normal;
+  font-weight: 590;
+  font-size: 17px;
+  line-height: 22px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.app-container.camera-cautions .camera-frame-header {
+  position: absolute;
+  width: 100%;
+  height: 56px;
+  left: 0;
+  top: env(safe-area-inset-top, 59px); 
+  z-index: 10;
+  padding: 0 20px; 
+  box-sizing: border-box;
+}
+
+.app-container.camera-cautions .camera-back-arrow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+}
+.app-container.camera-cautions .camera-back-arrow img {
+  width: 100%;
+  height: 100%;
+}
+
+.app-container.camera-cautions .camera-home-indicator-container {
+  position: absolute;
+  width: 100%;
+  height: 23px;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+  bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.app-container.camera-cautions .camera-home-indicator {
+  position: absolute;
+  width: 139px;
+  height: 5px;
+  left: calc(50% - 139px/2 - 0.5px);
+  bottom: 8px;
+  background: #FFFFFF;
+  border-radius: 100px;
+  transform: matrix(-1, 0, 0, 1, 0, 0);
+}
+
+.app-container.camera-cautions .camera-frame-content {
+  position: absolute;
+  width: 100%;
+  height: 719px;
+  left: 0;
+  /* top: 272px; -> 상단 헤더에 맞춰 유동적으로 변경 */
+  top: calc(59px + 56px + 100px); /* Status + Header + 여백 */
+  bottom: 0; /* 하단에 붙임 */
+  height: auto; /* 높이 자동 조절 */
+  
+  background: linear-gradient(180deg, #010101 -2.4%, #6A5099 61.56%, #AD82FA 139.13%);
+  border-radius: 25px 25px 0 0;
+  z-index: 5;
+  padding: 20px;
+  padding-bottom: 50px; /* 하단 여백 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.app-container.camera-cautions .camera-title {
+  width: 172px;
+  height: auto; /* 높이 자동 */
+  margin-top: 50px;
+  font-family: 'SUIT', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 138.29%;
+  text-align: center;
+  color: #A27AEB;
+}
+
+.app-container.camera-cautions .camera-description {
+  width: 308px;
+  max-width: 100%; 
+  height: auto;
+  margin-top: 22px;
+  font-family: 'SUIT', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 138.29%;
+  text-align: center;
+  color: #FFFFFF;
+  opacity: 0.9;
+}
+
+.app-container.camera-cautions .camera-close-button {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  right: 20px;
+  top: 22.12px; /* .camera-frame-header 내부 기준 */
+  border-radius: 61px;
+  cursor: pointer;
+  z-index: 15;
+}
+
+.app-container.camera-cautions .camera-tip-box {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  gap: 10px;
+  width: 302px;
+  max-width: 100%; 
+  height: auto;
+  min-height: 79px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  margin-top: 20px;
+}
+
+.app-container.camera-cautions .camera-tip-box-text {
+  width: 100%;
+  height: auto;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.app-container.camera-cautions .camera-check-button {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  gap: 10px;
+  width: 381px;
+  max-width: 90%; /* Responsive */
+  height: 55px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 83px;
+  margin-top: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.app-container.camera-cautions .camera-check-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.app-container.camera-cautions .camera-check-button-text {
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  color: #FFFFFF;
+}

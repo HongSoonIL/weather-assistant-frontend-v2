@@ -1,0 +1,166 @@
+/* ==================== Layout Containers ==================== */
+/* .app-container와 함께 사용되어 우선순위를 높임 */
+.app-container.camera-before {
+  position: relative;
+  /* [FIX] width/height 제거: App.css의 430px 너비를 상속받도록 함 */
+  /* width: 100%; */
+  /* height: 100%; */
+  background: linear-gradient(180deg, #091837 70.82%, #2B468E 112.23%);
+  overflow: hidden;
+
+  /* === FIX: App.css의 flex 및 padding 오버라이드 === */
+  display: block; /* position: absolute 자식 요소를 위해 flex를 덮어쓰기 */
+  padding: 0; /* App.css의 padding을 0으로 리셋 */
+  /* === END FIX === */
+}
+
+.app-container.camera-before .status-bar,
+.app-container.camera-before .frame-header,
+.app-container.camera-before .home-indicator-wrapper {
+  position: absolute;
+  width: 100%; /* 부모 너비(430px)에 맞춤 */
+  left: 0; 
+  z-index: 10;
+  box-sizing: border-box; /* padding 계산을 위해 추가 */
+}
+
+.app-container.camera-before .status-bar {
+  height: 59px;
+  /* padding: 0으로 리셋했으므로, safe-area-inset-top을 top으로 직접 적용 */
+  top: env(safe-area-inset-top, 0px);
+}
+
+.app-container.camera-before .frame-header {
+  height: 56px;
+  /* status-bar 높이(59px) 만큼 내려오도록 수정 */
+  top: env(safe-area-inset-top, 59px); 
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.app-container.camera-before .home-indicator-wrapper {
+  height: 23px;
+  /* padding: 0으로 리셋했으므로, safe-area-inset-bottom을 bottom으로 직접 적용 */
+  bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ==================== Background Layers ==================== */
+.app-container.camera-before .background-image {
+  position: absolute;
+  width: 713px;
+  height: 950.34px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 3px;
+  background-image: url('https://placehold.co/713x950/000000/FFF?text=BG');
+  filter: blur(25px);
+  z-index: 1;
+}
+
+.app-container.camera-before .overlay-rectangle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: linear-gradient(189.6deg, #101010 51.57%, #AD82FA 143.78%);
+  opacity: 0.4;
+  z-index: 2;
+}
+
+/* ==================== Status Elements (Decorative) ==================== */
+.app-container.camera-before .time-text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  top: 33.96%;
+  bottom: 25.3%;
+  font-family: 'SF Pro', sans-serif;
+  font-style: normal;
+  font-weight: 590;
+  font-size: 17px;
+  line-height: 22px;
+  text-align: center;
+  color: #fff;
+}
+
+/* ==================== Header UI ==================== */
+.app-container.camera-before .arrow-back {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+  z-index: 11;
+}
+
+.app-container.camera-before .arrow-back img {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ==================== Home Indicator ==================== */
+.app-container.camera-before .home-indicator-bar {
+  position: absolute;
+  width: 139px;
+  height: 5px;
+  left: calc(50% - 139px/2 - 0.5px);
+  bottom: 8px; /* home-indicator-wrapper 내부에서의 위치 */
+  background: #fff;
+  border-radius: 100px;
+  transform: matrix(-1, 0, 0, 1, 0, 0);
+}
+
+/* ==================== Camera Button ==================== */
+.app-container.camera-before .camera-button {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* top: 763px; -> bottom으로 변경하여 하단에 고정 */
+  bottom: 100px; /* home-indicator-wrapper 높이(23px) + 여백 */
+  z-index: 5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-container.camera-before .camera-button-group {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.app-container.camera-before .camera-button-outer {
+  box-sizing: border-box;
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  left: 0;
+  top: 0;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: inset 4px 4px 4px rgba(255, 255, 255, 0.25);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  backdrop-filter: blur(15px);
+  border-radius: 50%;
+}
+
+.app-container.camera-before .camera-button-inner {
+  position: absolute;
+  width: 63.42px;
+  height: 63.42px;
+  left: 8.29px; /* Centered */
+  top: 8.29px; /* Centered */
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0.7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), inset 4px 4px 4px rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  border-radius: 50%;
+}

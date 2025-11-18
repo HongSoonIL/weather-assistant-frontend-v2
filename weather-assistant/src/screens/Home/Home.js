@@ -11,8 +11,9 @@ const Home = ({
   sendFromFAQ, 
   handleVoiceInput,
   weather,
-  uid,           // 🔥 추가: 현재 UID
-  setUid         // 🔥 추가: UID 변경 함수
+  uid,
+  setUid,
+  setView // 1. setView prop 받기
 }) => {
 
   // ===== 🔥 새로 추가: 사용자 프로필 관리 =====
@@ -356,8 +357,27 @@ const Home = ({
         </div>
       </div>
 
-      {/* ===== 하단 입력창 ===== */}
+      {/* ===== 하단 입력창 (수정됨) ===== */}
       <div className="footer-input">
+        {/* 2. 카메라 버튼 추가 및 setView 연결 */}
+        <button className="plus-button" onClick={() => setView('camera')}>
+          {/* 3. 깨진 이미지 아이콘을 인라인 SVG로 대체 */}
+          <svg 
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="#091837"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+            <circle cx="12" cy="13" r="3" />
+          </svg>
+        </button>
+
         <div className="input-wrapper">
           <input
             type="text"

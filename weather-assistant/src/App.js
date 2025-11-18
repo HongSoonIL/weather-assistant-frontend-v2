@@ -4,6 +4,8 @@ import Home from './screens/Home/Home';
 import Chat from './screens/Chat/Chat';
 import VoiceInput from './screens/VoiceInput/VoiceInput';
 import KnockDetector from './screens/VoiceInput/KnockDetector'; 
+// 1. 경로를 'screens' (복수형) 및 'camera' (소문자)로 수정합니다.
+import CameraScreen from './screens/camera/CameraScreen'; 
 
 function App() {
   const [view, setView] = useState('home');
@@ -450,8 +452,9 @@ useEffect(() => {
           sendFromFAQ={sendFromFAQ}
           handleVoiceInput={handleVoiceInput}
           weather={weather}
-          uid={uid}           // 🔥 추가
-          setUid={setUid}     // 🔥 추가
+          uid={uid}
+          setUid={setUid}
+          setView={setView} // 2. setView prop 전달
         />
       )}
       {view === 'chat' && (
@@ -480,6 +483,13 @@ useEffect(() => {
               console.error('메시지 전송 실패:', error);
             }
           }}
+        />
+      )}
+
+      {/* 3. 'camera' 뷰 렌더링 로직 추가 */}
+      {view === 'camera' && (
+        <CameraScreen 
+          onBack={() => setView('home')} // 'onBack' prop으로 뒤로가기 함수 전달
         />
       )}
     </div>
