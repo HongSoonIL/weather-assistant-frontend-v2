@@ -48,7 +48,7 @@ const KnockDetector = ({ onKnock }) => {
             borderRadius: '10px', boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
         }}>
             <p style={{ margin: 0, fontWeight: 'bold' }}>
-                아두이노 연결 상태: 
+                라즈베리파이 연결 상태: 
                 <span style={{ color: status === 'Connected' ? 'green' : 'red' }}>
                     {status}
                 </span>

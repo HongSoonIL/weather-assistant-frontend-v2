@@ -1,0 +1,130 @@
+/* Camera */
+.camera {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #091837 70.82%, #2B468E 112.23%);
+  overflow: hidden;
+
+  display: block;
+  padding: 0;
+}
+
+.camera .background-image {
+  position: absolute;
+  width: 713px;
+  height: 950.34px;
+  left: 50%;
+  top: 3px;
+  background-image: url('https://placehold.co/713x950/000000/FFF?text=BG');
+  /* background: url('Assets/camera-bg.jpg'); */
+  filter: blur(25px);
+  z-index: 1;
+}
+
+.camera .overlay-rectangle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: linear-gradient(189.6deg, #101010 51.57%, #AD82FA 143.78%);
+  opacity: 0.8;
+  backdrop-filter: blur(25px);
+  z-index: 2;
+}
+
+.camera .status-bar {
+  position: absolute;
+  width: 100%;
+  height: 59px;
+  left: 0;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  /* ... Decorative elements ... */
+}
+.camera .time {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 33.96%;
+  bottom: 25.3%;
+  font-family: 'SF Pro', sans-serif;
+  font-weight: 590;
+  font-size: 17px;
+  line-height: 22px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.camera .top-nav {
+  position: absolute;
+  width: 100%; /* 430px -> 100% */
+  height: 56px;
+  left: 0;
+  top: env(safe-area-inset-top, 59px);
+  z-index: 10;
+}
+
+.camera .back-arrow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+}
+.camera .back-arrow img {
+  width: 100%;
+  height: 100%;
+}
+
+
+.camera .home-indicator {
+  position: absolute;
+  width: 100%;
+  height: 23px;
+  left: 0;
+  bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 10;
+}
+
+.camera .home-bar {
+  position: absolute;
+  width: 139px;
+  height: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8px;
+  background: #FFFFFF;
+  border-radius: 100px;
+}
+
+.camera .scan-message {
+  position: absolute;
+  width: 100%; /* 중앙 정렬을 위해 100% 혹은 auto */
+  text-align: center;
+  top: 151px;
+  left: 0;
+  font-family: 'SUIT', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: #C1A0F9;
+  z-index: 5;
+}
+
+/* You might want to add a scanning animation here */
+/* For example, a flashing "Scanning..." text */
+@keyframes scanning-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+.camera .scan-message {
+  animation: scanning-pulse 1.5s infinite;
+}
+
+/* Hiding the camera button from Camera.css */
+.camera .camera-button {
+  display: none;
+}
