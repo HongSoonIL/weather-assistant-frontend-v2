@@ -2,47 +2,76 @@
 /* .app-container와 함께 사용되어 우선순위를 높임 */
 .app-container.camera-before {
   position: relative;
-  /* [FIX] width/height 제거: App.css의 430px 너비를 상속받도록 함 */
+  /* App.css 쪽 430px 고정 레이아웃을 그대로 사용하도록 width/height 제거 */
   /* width: 100%; */
   /* height: 100%; */
   background: linear-gradient(180deg, #091837 70.82%, #2B468E 112.23%);
   overflow: hidden;
 
-  /* === FIX: App.css의 flex 및 padding 오버라이드 === */
-  display: block; /* position: absolute 자식 요소를 위해 flex를 덮어쓰기 */
-  padding: 0; /* App.css의 padding을 0으로 리셋 */
-  /* === END FIX === */
+  /* App.css의 flex 레이아웃/패딩을 덮어쓰기 */
+  display: block;
+  padding: 0;
 }
 
+/* 상단 상태바 / 헤더 / 하단 홈 인디케이터 공통 레이아웃 */
 .app-container.camera-before .status-bar,
 .app-container.camera-before .frame-header,
 .app-container.camera-before .home-indicator-wrapper {
   position: absolute;
-  width: 100%; /* 부모 너비(430px)에 맞춤 */
-  left: 0; 
+  width: 100%;
+  left: 0;
   z-index: 10;
-  box-sizing: border-box; /* padding 계산을 위해 추가 */
+  box-sizing: border-box;
 }
 
+/* ==================== Status Bar ==================== */
 .app-container.camera-before .status-bar {
   height: 59px;
-  /* padding: 0으로 리셋했으므로, safe-area-inset-top을 top으로 직접 적용 */
+  /* 노치 대응: safe-area-inset-top 만큼 띄우기 */
   top: env(safe-area-inset-top, 0px);
 }
 
+/* 가운데 시계 텍스트 (지금은 비어 있지만 디자인 유지용) */
+.app-container.camera-before .time-text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  top: 33.96%;
+  bottom: 25.3%;
+  font-family: 'SF Pro', sans-serif;
+  font-style: normal;
+  font-weight: 590;
+  font-size: 17px;
+  line-height: 22px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* ==================== Header ==================== */
 .app-container.camera-before .frame-header {
   height: 56px;
-  /* status-bar 높이(59px) 만큼 내려오도록 수정 */
-  top: env(safe-area-inset-top, 59px); 
+  /* 상태바(59px) + safe-area-inset-top 만큼 아래 */
+  top: calc(env(safe-area-inset-top, 0px) + 59px);
   display: flex;
   align-items: center;
   padding: 0 20px;
 }
 
-.app-container.camera-before .home-indicator-wrapper {
-  height: 23px;
-  /* padding: 0으로 리셋했으므로, safe-area-inset-bottom을 bottom으로 직접 적용 */
-  bottom: env(safe-area-inset-bottom, 0px);
+/* 뒤로가기 아이콘 */
+.app-container.camera-before .arrow-back {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+  z-index: 11;
+}
+
+.app-container.camera-before .arrow-back img {
+  width: 100%;
+  height: 100%;
 }
 
 /* ==================== Background Layers ==================== */
@@ -69,52 +98,6 @@
   z-index: 2;
 }
 
-/* ==================== Status Elements (Decorative) ==================== */
-.app-container.camera-before .time-text {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  top: 33.96%;
-  bottom: 25.3%;
-  font-family: 'SF Pro', sans-serif;
-  font-style: normal;
-  font-weight: 590;
-  font-size: 17px;
-  line-height: 22px;
-  text-align: center;
-  color: #fff;
-}
-
-/* ==================== Header UI ==================== */
-.app-container.camera-before .arrow-back {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  left: 20px;
-  top: 16px;
-  cursor: pointer;
-  z-index: 11;
-}
-
-.app-container.camera-before .arrow-back img {
-  width: 100%;
-  height: 100%;
-}
-
-
-/* ==================== Home Indicator ==================== */
-.app-container.camera-before .home-indicator-bar {
-  position: absolute;
-  width: 139px;
-  height: 5px;
-  left: calc(50% - 139px/2 - 0.5px);
-  bottom: 8px; /* home-indicator-wrapper 내부에서의 위치 */
-  background: #fff;
-  border-radius: 100px;
-  transform: matrix(-1, 0, 0, 1, 0, 0);
-}
-
 /* ==================== Camera Button ==================== */
 .app-container.camera-before .camera-button {
   position: absolute;
@@ -122,8 +105,8 @@
   height: 100px;
   left: 50%;
   transform: translateX(-50%);
-  /* top: 763px; -> bottom으로 변경하여 하단에 고정 */
-  bottom: 100px; /* home-indicator-wrapper 높이(23px) + 여백 */
+  /* 하단 safe area + 여백 60px 위에 위치 */
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 60px);
   z-index: 5;
   cursor: pointer;
   display: flex;
@@ -131,36 +114,26 @@
   justify-content: center;
 }
 
-.app-container.camera-before .camera-button-group {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+/* svg 아이콘이 버튼 안에 꽉 차도록 */
+.app-container.camera-before .camera-button-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.app-container.camera-before .camera-button-outer {
-  box-sizing: border-box;
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  left: 0;
-  top: 0;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: inset 4px 4px 4px rgba(255, 255, 255, 0.25);
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  backdrop-filter: blur(15px);
-  border-radius: 50%;
+/* ==================== Home Indicator ==================== */
+.app-container.camera-before .home-indicator-wrapper {
+  height: 23px;
+  bottom: env(safe-area-inset-bottom, 0px);
 }
 
-.app-container.camera-before .camera-button-inner {
+.app-container.camera-before .home-indicator-bar {
   position: absolute;
-  width: 63.42px;
-  height: 63.42px;
-  left: 8.29px; /* Centered */
-  top: 8.29px; /* Centered */
-  background: rgba(255, 255, 255, 0.5);
-  opacity: 0.7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), inset 4px 4px 4px rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-  border-radius: 50%;
+  width: 139px;
+  height: 5px;
+  left: calc(50% - 139px / 2 - 0.5px);
+  bottom: 8px;
+  background: #ffffff;
+  border-radius: 100px;
+  transform: matrix(-1, 0, 0, 1, 0, 0);
 }

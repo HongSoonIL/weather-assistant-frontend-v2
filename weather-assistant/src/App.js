@@ -40,7 +40,7 @@ function App() {
         setCoords({ latitude, longitude });
         
         try {
-          const res = await fetch('https://weather-assistant-backend1.onrender.com/reverse-geocode', {
+          const res = await fetch('http://localhost:4000/reverse-geocode', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ latitude, longitude })
@@ -53,7 +53,7 @@ function App() {
         }
 
         try {
-          const res = await fetch('https://weather-assistant-backend1.onrender.com/weather', { //http로 변경
+          const res = await fetch('http://localhost:4000/weather', { //http로 변경
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ latitude, longitude })
@@ -327,7 +327,7 @@ function App() {
 
     try {
       // ✅ 엔드포인트를 /chat으로 변경하고, uid를 함께 전송합니다.
-      const res = await fetch('https://weather-assistant-backend1.onrender.com/chat', {
+      const res = await fetch('http://localhost:4000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userInput: messageText, location, coords, uid: uid }), //🔥 하드코딩된 값 대신 state 사용
@@ -490,6 +490,7 @@ useEffect(() => {
       {view === 'camera' && (
         <CameraScreen 
           onBack={() => setView('home')} // 'onBack' prop으로 뒤로가기 함수 전달
+          uid={uid}
         />
       )}
     </div>
