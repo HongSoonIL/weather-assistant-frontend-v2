@@ -1,87 +1,76 @@
 /* ============================================
    Camera Cautions Screen (카메라 주의사항 화면)
-   - bottom: 0 유지
-   - 위로 넓게 확장(height 증가)
-   - 여백/간격 전체적으로 여유 있게 조정
 ============================================ */
 
-/* 전체 컨테이너 */
+/* 전체 컨테이너 - App.css의 padding 리셋 및 배경색 지정 */
 .app-container.camera-cautions {
   position: relative;
   width: 100%;
   height: 100%;
-  max-width: 430px;
-  max-height: 932px;
-  margin: 0 auto;
-  background: #5D5466;
+  background: #5D5466; /* 회색 배경 */
   overflow: hidden;
+  display: block; /* flex 해제 */
+  padding: 0 !important; /* App.css의 padding 제거 */
 }
 
 /* 상단 상태바 */
 .app-container.camera-cautions .camera-status-bar {
   position: absolute;
-  top: 0;
+  top: env(safe-area-inset-top, 0px);
   width: 100%;
   height: 59px;
-
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 }
 
-.app-container.camera-cautions .camera-time-center {
-  font-family: "SF Pro";
-  font-size: 17px;
-  font-weight: 590;
-  color: #ffffff;
-}
-
 /* 뒤로가기 헤더 */
 .app-container.camera-cautions .camera-header {
   position: absolute;
-  top: 59px;
+  top: calc(env(safe-area-inset-top, 0px) + 59px);
   width: 100%;
   height: 48px;
   display: flex;
   align-items: center;
+  z-index: 10;
 }
 
 .app-container.camera-cautions .camera-header-back {
   width: 24px;
   height: 24px;
-  margin-left: 16px;
+  margin-left: 20px;
   cursor: pointer;
 }
 
 .app-container.camera-cautions .camera-header-back img {
-  width: 24px;
-  height: 24px;
-  filter: invert(1);
+  width: 100%;
+  height: 100%;
+  filter: invert(1); /* 흰색 아이콘 */
 }
 
 /* ============================
-   시트 (아래 카드) 확장 버전
-   bottom:0 그대로 + height 증가
+   하단 시트 (주의사항 카드)
 ============================ */
 .app-container.camera-cautions .camera-sheet {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0; /* 👈 그대로 유지 */
-
- 
+  bottom: 0;
+  
+  /* 그라데이션 배경 */
   background: linear-gradient(180deg, #13031f, #5d33a5 50%, #a66cf8 100%);
   border-radius: 24px 24px 0 0;
-
-  padding: 48px 24px 52px; /* 👈 내부 여백 확장 */
+  
+  /* 내부 여백 및 배치 */
+  padding: 48px 24px 52px;
   box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  
   box-shadow: 0px -8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 5;
 }
 
 /* 닫기 버튼(X) */
@@ -89,28 +78,24 @@
   position: absolute;
   top: 20px;
   right: 20px;
-
   width: 32px;
   height: 32px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(0, 0, 0, 0.18);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 18px;
   color: #ffffff;
   cursor: pointer;
 }
 
-/* 제목 */
+/* 제목 텍스트 */
 .app-container.camera-cautions .camera-sheet-title {
   margin-top: 8px;
-  margin-bottom: 26px; /* 👈 넉넉하게 확대 */
-
-  font-family: 'SUIT';
+  margin-bottom: 26px;
+  font-family: 'SUIT', sans-serif;
   text-align: center;
   font-weight: 700;
   font-size: 22px;
@@ -122,71 +107,72 @@
   color: #dcb4ff;
 }
 
-/* 설명 문단 */
+/* 설명 텍스트 */
 .app-container.camera-cautions .camera-sheet-description {
-  margin-bottom: 38px; /* 👈 32→38 더 넓힘 */
-
+  margin-bottom: 38px;
   text-align: center;
-  font-family: 'SUIT';
+  font-family: 'SUIT', sans-serif;
   font-size: 14px;
   line-height: 1.55;
   color: #ffffff;
   opacity: 0.9;
 }
 
-/* 안내 카드 */
+/* 개별 안내 카드 */
 .app-container.camera-cautions .camera-tip-card {
   width: 100%;
   max-width: 340px;
   min-height: 74px;
-
   padding: 16px;
-  margin-bottom: 22px; /* 👈 카드 간격 넓힘 */
-
+  margin-bottom: 16px;
+  
   background: rgba(255, 255, 255, 0.12);
   border: 0.5px solid rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(8px);
   border-radius: 16px;
-
-  font-family: 'SUIT';
+  
+  font-family: 'SUIT', sans-serif;
   font-size: 14px;
   color: #ffffff;
   text-align: center;
   line-height: 1.6;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 확인 버튼 */
 .app-container.camera-cautions .camera-sheet-confirm {
-  margin-top: 12px;
-
+  margin-top: 20px;
   width: 100%;
   max-width: 340px;
   height: 52px;
-
+  
   border-radius: 999px;
   border: none;
   background: rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(8px);
-
-  font-family: 'SUIT';
+  
+  font-family: 'SUIT', sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: #ffffff;
-
+  
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
 }
 
 /* 홈 인디케이터 */
 .app-container.camera-cautions .camera-home-indicator-container {
   position: absolute;
-  bottom: 6px;
+  bottom: 8px;
   width: 100%;
   display: flex;
   justify-content: center;
+  z-index: 10;
 }
 
 .app-container.camera-cautions .camera-home-indicator {
