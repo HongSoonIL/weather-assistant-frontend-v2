@@ -364,7 +364,7 @@ const Home = ({
           {/* 2. 카메라 버튼 추가 및 setView 연결 */}
           <button className="plus-button" onClick={() => setView('camera')}>
             <img 
-              src={`${process.env.PUBLIC_URL}/assets/icons/plus.svg`}
+              src={`${process.env.PUBLIC_URL}/assets/icons/Camera.svg`}
               alt="카메라연결"
             />
           </button>

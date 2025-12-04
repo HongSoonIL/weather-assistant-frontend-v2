@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import './Camera_Before.css';
 import './Camera_Cautions.css';
 import './Camera.css';
@@ -252,7 +252,7 @@ const CameraScreen = ({ onBack, uid }) => {
       backgroundColor: 'rgba(0,0,0,0.3)',
       borderRadius: '20px'
     }}>
-      원하는 구도에서 촬영 버튼을 눌러주세요
+      원하는 구도에서<br />촬영 버튼을 눌러주세요
     </div>
 
     {/* 촬영 버튼 */}

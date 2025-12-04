@@ -6,9 +6,10 @@ import VoiceInput from './screens/VoiceInput/VoiceInput';
 import KnockDetector from './screens/VoiceInput/KnockDetector'; 
 // 1. 경로를 'screens' (복수형) 및 'camera' (소문자)로 수정합니다.
 import CameraScreen from './screens/camera/CameraScreen'; 
+import WelcomeScreen from './screens/welcome/WelcomeScreen'; 
 
 function App() {
-  const [view, setView] = useState('home');
+  const [view, setView] = useState('welcome');
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [time, setTime] = useState('');
@@ -442,6 +443,9 @@ useEffect(() => {
   return (
     <div className={`app ${view}`}>
       <KnockDetector onKnock={onKnock} />
+      {view === 'welcome' && (
+        <WelcomeScreen setView={setView} setUid={setUid} />
+      )}
       {view === 'home' && (
         <Home 
           time={time}
