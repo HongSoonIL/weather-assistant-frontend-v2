@@ -3,10 +3,10 @@ import './App.css';
 import Home from './screens/Home/Home';
 import Chat from './screens/Chat/Chat';
 import VoiceInput from './screens/VoiceInput/VoiceInput';
-import KnockDetector from './screens/VoiceInput/KnockDetector'; 
+import KnockDetector from './screens/VoiceInput/KnockDetector';
 // 1. 경로를 'screens' (복수형) 및 'camera' (소문자)로 수정합니다.
-import CameraScreen from './screens/camera/CameraScreen'; 
-import WelcomeScreen from './screens/welcome/WelcomeScreen'; 
+import CameraScreen from './screens/camera/CameraScreen';
+import WelcomeScreen from './screens/welcome/WelcomeScreen';
 
 function App() {
   const [view, setView] = useState('welcome');
@@ -19,14 +19,15 @@ function App() {
   // const [uid, setUid] = useState('user01');
   // 🔥 1. UID를 state로 관리하도록 변경
   const [uid, setUid] = useState('testUser1'); // 기본값을 testUser1로 설정
-  
+
   // 진행 중인 요청을 추적하기 위한 ref
   const abortControllerRef = useRef(null);
   const thinkingTimerRef = useRef(null);
 
   // 현재 화면을 추적하기 위한 state 추가 (App.js 상단에)
   const [previousView, setPreviousView] = useState('home');
-  
+
+  const [currentScreen, setCurrentScreen] = useState('home'); // 'home', 'chat', 'camera'
 
   useEffect(() => {
     const now = new Date();
@@ -39,7 +40,7 @@ function App() {
       async (pos) => {
         const { latitude, longitude } = pos.coords;
         setCoords({ latitude, longitude });
-        
+
         try {
           const res = await fetch('http://localhost:4000/reverse-geocode', {
             method: 'POST',
@@ -74,26 +75,26 @@ function App() {
   // 뒤로가기 함수 - 진행 중인 요청 취소 및 완전한 상태 초기화
   const handleBackToHome = () => {
     console.log('🔙 뒤로가기 시작 - 모든 상태 초기화');
-    
+
     // 1. 진행 중인 HTTP 요청 취소
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
       console.log('⏹️ HTTP 요청 취소됨');
     }
-    
+
     // 2. 진행 중인 타이머 취소
     if (thinkingTimerRef.current) {
       clearTimeout(thinkingTimerRef.current);
       thinkingTimerRef.current = null;
       console.log('⏰ Thinking 타이머 취소됨');
     }
-    
+
     // 3. 상태 즉시 초기화 (동기적으로)
     setView('home');
     setMessages([]);
     setInput('');
-    
+
     console.log('✅ 모든 상태 초기화 완료');
   };
 
@@ -104,14 +105,14 @@ function App() {
   //     if (abortControllerRef.current) {
   //       abortControllerRef.current.abort();
   //     }
-      
+
   //     // 새로운 AbortController 생성
   //     abortControllerRef.current = new AbortController();
   //     const signal = abortControllerRef.current.signal;
-      
+
   //     let thinkingShown = false;
   //     let thinkingStartTime = null;
-      
+
   //     // 800ms 후에 "Thinking" 메시지 표시
   //     thinkingTimerRef.current = setTimeout(() => {
   //       // 요청이 취소되지 않았을 때만 Thinking 표시
@@ -199,7 +200,7 @@ function App() {
   //         }),
   //         signal // 그래프 요청에도 취소 신호 추가
   //       });
-        
+
   //       if (!signal.aborted) {
   //         graphData = await graphRes.json();
   //       }
@@ -212,10 +213,10 @@ function App() {
   //         console.log('🚫 응답 처리 중단됨 (요청 취소)');
   //         return;
   //       }
-        
+
   //       setMessages(prev => {
   //         const newMessages = [...prev];
-          
+
   //         // "Thinking"이 표시되었으면 제거
   //         if (thinkingShown && newMessages[newMessages.length - 1]?.isThinking) {
   //           newMessages.pop();
@@ -236,7 +237,7 @@ function App() {
   //       const elapsed = Date.now() - thinkingStartTime;
   //       const minDisplayTime = 1000;
   //       const remainingTime = Math.max(0, minDisplayTime - elapsed);
-        
+
   //       setTimeout(() => {
   //         if (!signal.aborted) {
   //           processResponse();
@@ -248,17 +249,17 @@ function App() {
 
   //     if (data.error && !signal.aborted) {
   //       console.error('API 오류:', data.error);
-        
+
   //       const processError = () => {
   //         if (signal.aborted) return;
-          
+
   //         setMessages(prev => {
   //           const newMessages = [...prev];
-            
+
   //           if (thinkingShown && newMessages[newMessages.length - 1]?.isThinking) {
   //             newMessages.pop();
   //           }
-            
+
   //           return [...newMessages, {
   //             type: 'bot',
   //             text: `❌ 오류: ${data.error}`
@@ -278,22 +279,22 @@ function App() {
 
   //     // 요청 완료 후 AbortController 정리
   //     abortControllerRef.current = null;
-      
+
   //   } catch (error) {
   //     // AbortError는 정상적인 취소이므로 에러 메시지 표시하지 않음
   //     if (error.name === 'AbortError') {
   //       console.log('🚫 요청이 사용자에 의해 취소되었습니다.');
   //       return;
   //     }
-      
+
   //     const processErrorCatch = () => {
   //       setMessages(prev => {
   //         const newMessages = [...prev];
-          
+
   //         if (newMessages[newMessages.length - 1]?.isThinking) {
   //           newMessages.pop();
   //         }
-          
+
   //         return [...newMessages, {
   //           type: 'bot',
   //           text: `❌ ${error.message}`
@@ -302,13 +303,13 @@ function App() {
   //     };
 
   //     processErrorCatch();
-      
+
   //     // 에러 발생 시에도 AbortController 정리
   //     abortControllerRef.current = null;
   //   }
   // };
 
-// ✨ API 호출 함수 (새로운 백엔드 아키텍처에 맞게 대폭 수정됨) ✨
+  // ✨ API 호출 함수 (새로운 백엔드 아키텍처에 맞게 대폭 수정됨) ✨
   // ==================================================================
   const callGeminiAPI = async (messageText) => {
     // 이전 요청이 있다면 취소
@@ -317,7 +318,7 @@ function App() {
     }
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
-    
+
     // "Thinking..." 메시지 표시 로직
     let thinkingShown = false;
     thinkingTimerRef.current = setTimeout(() => {
@@ -344,23 +345,23 @@ function App() {
 
       // "Thinking" 메시지를 실제 응답으로 교체
       setMessages(prev => {
-          const newMessages = [...prev];
-          // Thinking 메시지가 있다면 제거
-          if (thinkingShown && newMessages[newMessages.length - 1]?.isThinking) {
-            newMessages.pop();
+        const newMessages = [...prev];
+        // Thinking 메시지가 있다면 제거
+        if (thinkingShown && newMessages[newMessages.length - 1]?.isThinking) {
+          newMessages.pop();
+        }
+        // 백엔드에서 받은 데이터로 새 메시지 추가
+        return [
+          ...newMessages,
+          {
+            type: 'bot',
+            text: data.reply || '응답을 이해하지 못했어요.',
+            // 백엔드가 그래프/미세먼지 데이터를 주면 그대로 할당
+            graph: data.graph || null,
+            graphDate: data.graphDate || null,
+            dust: data.dust || null
           }
-          // 백엔드에서 받은 데이터로 새 메시지 추가
-          return [
-            ...newMessages,
-            {
-              type: 'bot',
-              text: data.reply || '응답을 이해하지 못했어요.',
-              // 백엔드가 그래프/미세먼지 데이터를 주면 그대로 할당
-              graph: data.graph || null,
-              graphDate: data.graphDate || null, 
-              dust: data.dust || null
-            }
-          ];
+        ];
       });
 
     } catch (error) {
@@ -371,11 +372,11 @@ function App() {
       // 그 외 네트워크 오류 등 처리
       clearTimeout(thinkingTimerRef.current);
       setMessages(prev => {
-          const newMessages = [...prev].filter(m => !m.isThinking);
-          return [...newMessages, { type: 'bot', text: `❌ 오류가 발생했어요: ${error.message}` }];
+        const newMessages = [...prev].filter(m => !m.isThinking);
+        return [...newMessages, { type: 'bot', text: `❌ 오류가 발생했어요: ${error.message}` }];
       });
     } finally {
-        abortControllerRef.current = null;
+      abortControllerRef.current = null;
     }
   };
 
@@ -416,17 +417,17 @@ function App() {
 
   // 기존 useEffect들 아래에 이 코드를 추가하세요
 
-// 메시지가 업데이트될 때마다 스크롤을 맨 아래로
-useEffect(() => {
-  const messagesContainer = document.querySelector('.messages');
-  if (messagesContainer && messages.length > 0) {
-    // 부드러운 스크롤로 맨 아래로 이동
-    messagesContainer.scrollTo({
-      top: messagesContainer.scrollHeight,
-      behavior: 'smooth'
-    });
-  }
-}, [messages]); // messages 배열이 변경될 때마다 실행
+  // 메시지가 업데이트될 때마다 스크롤을 맨 아래로
+  useEffect(() => {
+    const messagesContainer = document.querySelector('.messages');
+    if (messagesContainer && messages.length > 0) {
+      // 부드러운 스크롤로 맨 아래로 이동
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [messages]); // messages 배열이 변경될 때마다 실행
 
   // 컴포넌트 언마운트 시 정리
   useEffect(() => {
@@ -447,7 +448,7 @@ useEffect(() => {
         <WelcomeScreen setView={setView} setUid={setUid} />
       )}
       {view === 'home' && (
-        <Home 
+        <Home
           time={time}
           location={location}
           input={input}
@@ -462,16 +463,17 @@ useEffect(() => {
         />
       )}
       {view === 'chat' && (
-        <Chat 
+        <Chat
           messages={messages}
           input={input}
           setInput={setInput}
           handleSend={handleSend}
           onBackToHome={handleBackToHome}
           handleVoiceInput={handleVoiceInput}
+          onCameraClick={() => setView('camera')}
         />
       )}
- 
+
 
       {view === 'listening' && (
         <VoiceInput
@@ -479,7 +481,7 @@ useEffect(() => {
           previousView={previousView} // 이전 화면 정보 전달
           onResult={async (text) => {
             console.log('🎤 음성 결과 받음:', text);
-            
+
             // 즉시 메시지 전송 (지연 없음)
             try {
               await sendMessage(text, false);
@@ -492,12 +494,15 @@ useEffect(() => {
 
       {/* 3. 'camera' 뷰 렌더링 로직 추가 */}
       {view === 'camera' && (
-        <CameraScreen 
-          onBack={() => setView('home')} // 'onBack' prop으로 뒤로가기 함수 전달
+        <CameraScreen
+          onBack={() => setView('chat')} // 채팅에서 카메라로 왔으므로 채팅으로 돌아감
           uid={uid}
         />
       )}
     </div>
+
+
+
   );
 }
 
