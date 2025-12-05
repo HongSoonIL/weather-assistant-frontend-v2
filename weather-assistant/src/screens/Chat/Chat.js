@@ -3,13 +3,14 @@ import './Chat.css';
 import WeatherLineChart from './WeatherLineChart';
 import DustLevelChart from './DustLevelChart';
 
-const Chat = ({ 
-  messages, 
-  input, 
-  setInput, 
-  handleSend, 
+const Chat = ({
+  messages,
+  input,
+  setInput,
+  handleSend,
   handleVoiceInput,
-  onBackToHome 
+  onBackToHome,
+  onCameraClick
 }) => {
   //const chartRef = useRef(null); //경고메시지가 떠서 주석 처리하였습니다.
   const [chatTitle, setChatTitle] = useState(''); // 제목 상태 추가
@@ -20,12 +21,12 @@ const Chat = ({
   // 메시지 컨테이너 참조 생성
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
-  
+
   useEffect(() => {
     // 첫 번째 사용자 메시지가 있고 아직 제목을 생성하지 않았을 때
     if (messages.length >= 1 && messages[0]?.type === 'user' && !titleGeneratedRef.current) {
       titleGeneratedRef.current = true; // 제목 생성 시작 플래그
-      
+
       const generateTitle = async () => {
         try {
           const response = await fetch('http://localhost:4000/generate-title', { //최종 배포시 http://localhost:4000 -> https://weather-assistant-backend1.onrender.com
@@ -33,17 +34,17 @@ const Chat = ({
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userInput: messages[0].text })
           });
-          
+
           if (!response.ok) {
             console.error('제목 생성 API 오류:', response.status);
             setChatTitle('Weather Chat');
             return;
           }
-          
+
           const data = await response.json();
           setChatTitle(data.title || 'Weather Chat');
           console.log('🏷️ 생성된 채팅 제목:', data.title);
-          
+
         } catch (err) {
           console.error('제목 생성 실패:', err);
           setChatTitle('Weather Chat');
@@ -58,7 +59,7 @@ const Chat = ({
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
       const container = messagesContainerRef.current;
-      
+
       // 완전히 맨 아래로 스크롤
       container.scrollTo({
         top: container.scrollHeight,
@@ -91,7 +92,7 @@ const Chat = ({
     }
   }, [messages]);
 
- // 뒤로가기 핸들러
+  // 뒤로가기 핸들러
   const handleBack = () => {
     if (onBackToHome) {
       onBackToHome();
@@ -106,13 +107,13 @@ const Chat = ({
       <header className="weather-header">
         {/* 왼쪽 뒤로가기 버튼 */}
         <button className="header-back-btn" onClick={handleBack} aria-label="뒤로가기">
-          <img 
+          <img
             src={`${process.env.PUBLIC_URL}/assets/icons/arrow-left.svg`}
             alt="뒤로가기"
             className="back-icon"
           />
         </button>
-        
+
         {/* 중앙 채팅 제목 */}
         <div className="header-chat-title">
           <h3>{chatTitle || 'Weather Chat'}</h3>
@@ -120,62 +121,68 @@ const Chat = ({
         <div className="header-icon-placeholder"></div>
       </header>
 
-      <div className="chat-screen"> 
+      <div className="chat-screen">
         <div className="messages" ref={messagesContainerRef}>
-            {messages.map((m, i) => (
-              <div key={i} className={`message-container ${m.type}`}>
-                {/* 라벨 */}
-                <div className="message-label">
-                  {m.type === 'user' ? 'me' : 'Lumee'}
-                </div>
-                
-                {/* 말풍선 */}
-                <div className={`bubble ${m.type}`}>
-                  {m.text && (
-                    <div>
-                      {m.isThinking ? (
-                        // 생각하는 중일 때 왼쪽에 점 애니메이션과 함께 표시
-                        <span style={{ display: 'flex', alignItems: 'center' }}>
-                          <div className="thinking-dots">
-                            <div className="thinking-dot"></div>
-                            <div className="thinking-dot"></div>
-                            <div className="thinking-dot"></div>
-                          </div>
-                          Thinking
-                        </span>
-                      ) : (
-                        // 일반 메시지
-                        m.text
-                      )}
-                      
-                     {/* 👇 기온 그래프를 먼저 렌더링 */}
+          {messages.map((m, i) => (
+            <div key={i} className={`message-container ${m.type}`}>
+              {/* 라벨 */}
+              <div className="message-label">
+                {m.type === 'user' ? 'me' : 'Lumee'}
+              </div>
+
+              {/* 말풍선 */}
+              <div className={`bubble ${m.type}`}>
+                {m.text && (
+                  <div>
+                    {m.isThinking ? (
+                      // 생각하는 중일 때 왼쪽에 점 애니메이션과 함께 표시
+                      <span style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className="thinking-dots">
+                          <div className="thinking-dot"></div>
+                          <div className="thinking-dot"></div>
+                          <div className="thinking-dot"></div>
+                        </div>
+                        Thinking
+                      </span>
+                    ) : (
+                      // 일반 메시지
+                      m.text
+                    )}
+
+                    {/* 👇 기온 그래프를 먼저 렌더링 */}
                     {Array.isArray(m.graph) && m.graph.length > 0 && (
                       <div className="graph-card">
-                        <WeatherLineChart 
-                          graph={m.graph} 
+                        <WeatherLineChart
+                          graph={m.graph}
                           date={m.graphDate}
                         />
                       </div>
                     )}
-                    
+
                     {/* 👇 미세먼지 시각화 그래프를 나중에 렌더링 */}
                     {m.dust && typeof m.dust.value === 'number' && (
                       <DustLevelChart value={m.dust.value} date={m.dust.date} />
                     )}
                   </div>
-                  )}
-                </div>
+                )}
               </div>
-            ))}
+            </div>
+          ))}
 
-             {/* 스크롤 타겟 - 화면에 보이지 않는 요소 */}
+          {/* 스크롤 타겟 - 화면에 보이지 않는 요소 */}
           <div ref={messagesEndRef} />
-          </div>
+        </div>
       </div>
 
 
       <div className="footer-input">
         <div className="input-wrapper">
+          <button className="plus-button" onClick={onCameraClick}>
+            <img
+              src={`${process.env.PUBLIC_URL}/assets/icons/Camera.svg`}
+              alt="카메라"
+            />
+          </button>
           <input
             type="text"
             placeholder="Ask Lumee about the weather..."
@@ -184,14 +191,15 @@ const Chat = ({
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
           <button className="mic-button" onClick={handleVoiceInput}>
-            <img 
+            <img
               src={`${process.env.PUBLIC_URL}/assets/icons/microphone.svg`}
               alt="음성입력"
             />
           </button>
         </div>
+
         <button className="send-button" onClick={handleSend}>
-          <img 
+          <img
             src={`${process.env.PUBLIC_URL}/assets/icons/send.svg`}
             alt="전송"
           />
