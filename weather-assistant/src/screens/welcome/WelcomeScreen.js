@@ -3,16 +3,19 @@ import React, { useState, useEffect } from 'react';
 import './WelcomeScreen.css';   // 카드형 첫 화면
 import './WelcomeStep1.css';    // 온보딩 step1/step2
 import './WelcomeStep3.css';    // 온보딩 step3 (채팅 + 말풍선 애니메이션)
-import './Welcome_Persona.css'; // 🔥 새로 추가: 페르소나 선택 화면
+import './Welcome_Persona.css'; // 페르소나 선택 화면
+import WelcomeConnect from './Welcome_Connect';
 
-const WelcomeScreen = ({ setView, setUid }) => {   // 🔥 setUid prop 추가
+const WelcomeScreen = ({ setView, setUid }) => {   // setUid prop 추가
   // step0 → 카드형
   // step1 → 온보딩 1
   // step2 → 온보딩 2
   // step3 → 온보딩 3 (채팅)
   // step4 → 페르소나 선택
+  // step5 → 아두이노 연결
   const [step, setStep] = useState(0);
-
+  const [selectedUid, setSelectedUid] = useState(null);
+  
   const orbSrc = {
     mp4: "https://res.cloudinary.com/dpuw0gcaf/video/upload/v1748854350/LumeeMagicOrb_Safari_rdmthi.mov",
     webm: "https://res.cloudinary.com/dpuw0gcaf/video/upload/v1748852283/LumeeMagicOrb_WEBM_tfqoa4.webm"
@@ -46,12 +49,18 @@ const WelcomeScreen = ({ setView, setUid }) => {   // 🔥 setUid prop 추가
     return () => timers.forEach((t) => clearTimeout(t));
   }, [step]);
 
-  // 🔥 페르소나 선택 시 동작
+  // 🔥 페르소나 선택 시 -> 연결 화면(Step 5)으로 이동
   const handleSelectPersona = (uid) => {
-    if (typeof setUid === 'function') {
-      setUid(uid);                    // Home에서 쓰는 uid(testUser1 / testUser2) 맞춰서 세팅
+    setSelectedUid(uid); // UID 임시 저장
+    setStep(5);          // 연결 화면으로 이동
+  };
+
+  // 🔥 최종 완료 (홈으로 이동)
+  const handleFinishWelcome = () => {
+    if (typeof setUid === 'function' && selectedUid) {
+      setUid(selectedUid); // 최종적으로 App.js의 UID 설정
     }
-    setView('home');                  // 홈 화면으로 이동
+    setView('home');       // 홈 화면으로 이동
   };
 
   /* =========================================
@@ -279,68 +288,48 @@ const WelcomeScreen = ({ setView, setUid }) => {   // 🔥 setUid prop 추가
   }
 
   /* =========================================
-    STEP 4 : Welcome_Persona (페르소나 선택 화면)
+    STEP 4 : 페르소나 선택 화면
   ========================================== */
-  return (
-    <div className="welcome-screen app-container welcome-persona-root">
-      {/* 상단 뒤로가기 */}
-      <div className="frame-header">
-        <div className="arrow-back" onClick={() => setStep(3)}>
-          <img
-            src={`${process.env.PUBLIC_URL}/assets/icons/arrow-left.svg`}
-            alt="Back"
-            className="arrow-back-icon"
-          />
+  if (step === 4) {
+    return (
+      <div className="welcome-screen app-container welcome-persona-root">
+        <div className="frame-header">
+          <div className="arrow-back" onClick={() => setStep(3)}>
+            <img src={`${process.env.PUBLIC_URL}/assets/icons/arrow-left.svg`} alt="Back" className="arrow-back-icon" />
+          </div>
+        </div>
+        <div className="persona-title-block">
+          <h2 className="persona-title-main">Who are you today?</h2>
+          <p className="persona-title-sub">Choose your Lumee Persona to begin</p>
+        </div>
+        <div className="persona-card-row">
+          <button className="persona-card" onClick={() => handleSelectPersona('testUser2')}>
+            <div className="persona-avatar">
+              <img src={`${process.env.PUBLIC_URL}/assets/icons/minjun.png`} alt="Minjun" />
+            </div>
+            <div className="persona-name">Minjun</div>
+            <div className="persona-desc">주말마다 자연을{'\n'}향하는 아웃도어 탐험가</div>
+          </button>
+          <button className="persona-card" onClick={() => handleSelectPersona('testUser1')}>
+            <div className="persona-avatar">
+              <img src={`${process.env.PUBLIC_URL}/assets/icons/minseo.png`} alt="Minseo" />
+            </div>
+            <div className="persona-name">Minseo</div>
+            <div className="persona-desc">날씨·알레르기에{'\n'}예민한 도시형 플래너</div>
+          </button>
         </div>
       </div>
+    );
+  }
 
-      {/* 타이틀 영역 */}
-      <div className="persona-title-block">
-        <h2 className="persona-title-main">Who are you today?</h2>
-        <p className="persona-title-sub">
-          Choose your Lumee Persona to begin
-        </p>
-      </div>
-
-      {/* 페르소나 카드 영역 */}
-      <div className="persona-card-row">
-        {/* Minjun */}
-        <button
-          className="persona-card"
-          onClick={() => handleSelectPersona('testUser2')}  // 🔥 Minjun uid
-        >
-          <div className="persona-avatar">
-            <img
-              src={`${process.env.PUBLIC_URL}/assets/icons/minjun.png`}
-              alt="Minjun"
-            />
-          </div>
-          <div className="persona-name">Minjun</div>
-          <div className="persona-desc">
-            주말마다 자연을{'\n'}
-            향하는 아웃도어 탐험가
-          </div>
-        </button>
-
-        {/* Minseo */}
-        <button
-          className="persona-card"
-          onClick={() => handleSelectPersona('testUser1')}  // 🔥 Minseo uid
-        >
-          <div className="persona-avatar">
-            <img
-              src={`${process.env.PUBLIC_URL}/assets/icons/minseo.png`}
-              alt="Minseo"
-            />
-          </div>
-          <div className="persona-name">Minseo</div>
-          <div className="persona-desc">
-            날씨·알레르기에{'\n'}
-            예민한 도시형 플래너
-          </div>
-        </button>
-      </div>
-    </div>
+  /* =========================================
+    🔥 STEP 5 : 아두이노 연결 화면 (NEW)
+  ========================================== */
+  return (
+    <WelcomeConnect 
+      onNext={handleFinishWelcome} 
+      onBack={() => setStep(4)} 
+    />
   );
 };
 

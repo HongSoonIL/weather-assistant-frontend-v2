@@ -8,6 +8,9 @@ import KnockDetector from './screens/VoiceInput/KnockDetector';
 import CameraScreen from './screens/camera/CameraScreen';
 import WelcomeScreen from './screens/welcome/WelcomeScreen';
 
+// LED 서비스 임포트
+import ledService from './services/LEDService';
+
 function App() {
   const [view, setView] = useState('welcome');
   const [input, setInput] = useState('');
@@ -17,7 +20,7 @@ function App() {
   const [coords, setCoords] = useState(null);
   const [weather, setWeather] = useState(null);
   // const [uid, setUid] = useState('user01');
-  // 🔥 1. UID를 state로 관리하도록 변경
+  // 1. UID를 state로 관리하도록 변경
   const [uid, setUid] = useState('testUser1'); // 기본값을 testUser1로 설정
 
   // 진행 중인 요청을 추적하기 위한 ref
@@ -342,6 +345,12 @@ function App() {
       if (signal.aborted) return;
 
       const data = await res.json();
+
+      // [핵심 기능] 백엔드에서 받은 LED 상태를 아두이노로 즉시 전송
+      if (data.ledStatus) {
+        console.log('🎨 채팅 기반 LED 업데이트:', data.ledStatus);
+        ledService.sendToArduino(data.ledStatus);
+      }
 
       // "Thinking" 메시지를 실제 응답으로 교체
       setMessages(prev => {

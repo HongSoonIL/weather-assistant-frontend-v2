@@ -268,9 +268,9 @@ const Home = ({
         <p className="temperature">
           {weather ? `${weather.temp}°` : `00°C`}
         </p>
-        <p className="description">
+        <div className="description">
           <WeatherDescriptionWithIcon weather={weather} />
-        </p>
+        </div>
         <p className="sub-summary">
           {weather ? 
             `Feels like ${weather.feelsLike}° | H: ${weather.tempMax}° L: ${weather.tempMin}°` 
