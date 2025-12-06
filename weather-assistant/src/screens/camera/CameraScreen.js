@@ -112,25 +112,15 @@ const CameraScreen = ({ onBack, uid }) => {
         <div className="camera-time-center"></div>
       </div>
 
-      <div className="camera-header">
-        <div className="camera-header-back" onClick={onBack}>
-          <img
-            src={`${process.env.PUBLIC_URL}/assets/icons/arrow-left.svg`}
-            alt="Back"
-          />
-        </div>
-      </div>
-
       <div className="camera-sheet">
         <button className="camera-sheet-close" type="button" onClick={onBack}>
           ✕
         </button>
 
         <div className="camera-sheet-title">
-          <span className="camera-sheet-title-highlight">스캔 전</span>
-          <span>에</span>
+          <span className="camera-sheet-title-highlight">스캔 전에</span>
           <br />
-          <span>이건 꼭 알아두세요!</span>
+          <span className="camera-sheet-title-highlight">이건 꼭 알아두세요!</span>
         </div>
 
         <div className="camera-sheet-description">
@@ -163,12 +153,8 @@ const CameraScreen = ({ onBack, uid }) => {
           onClick={() => setStep('before')}
           disabled={loading}
         >
-          {loading ? '연결 중...' : '확인'}
+          {loading ? '연결 중...' : '다음으로'}
         </button>
-      </div>
-
-      <div className="camera-home-indicator-container">
-        <div className="camera-home-indicator" />
       </div>
     </div>
   );
@@ -225,17 +211,16 @@ const CameraScreen = ({ onBack, uid }) => {
     <div className="overlay-rectangle" style={{ zIndex: 2 }}></div>
 
     {/* 뒤로가기 버튼 */}
-    <div className="frame-header" style={{ zIndex: 10 }}>
-      <div className="arrow-back" onClick={() => setStep('cautions')}>
+    <div className="header-frame" style={{ zIndex: 10 }}>
+      <div className="back-arrow" onClick={() => setStep('cautions')}>
         <img
           src={`${process.env.PUBLIC_URL}/assets/icons/arrow-left.svg`}
           alt="Back"
-          style={{ filter: 'invert(1)' }}
         />
       </div>
     </div>
 
-    {/* 촬영 가이드 텍스트 */}
+    {/* 촬영 가이드 텍스트
     <div style={{
       position: 'absolute',
       bottom: '150px',
@@ -254,6 +239,7 @@ const CameraScreen = ({ onBack, uid }) => {
     }}>
       원하는 구도에서<br />촬영 버튼을 눌러주세요
     </div>
+    */}
 
     {/* 촬영 버튼 */}
     <div 
@@ -305,12 +291,11 @@ const CameraScreen = ({ onBack, uid }) => {
         <div className="time"></div>
       </div>
 
-      <div className="top-nav">
+      <div className="header-frame">
         <div className="back-arrow" onClick={() => setStep('before')}>
           <img
             src={`${process.env.PUBLIC_URL}/assets/icons/arrow-left.svg`}
             alt="Back"
-            style={{ filter: 'invert(1)' }}
           />
         </div>
       </div>
@@ -427,15 +412,14 @@ const CameraScreen = ({ onBack, uid }) => {
       </div>
 
       {/* 완료 버튼 */}
-      <div className="camera-check" onClick={onBack}>
-        <div className="circle"></div>
-        <div className="inner-circle"></div>
-        <div className="center-dot"></div>
-      </div>
+      <div
+        className="camera-check"
+        onClick={onBack}
+        style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/icons/check.svg)`
+        }}
+      ></div>
 
-      <div className="home-indicator-wrapper">
-        <div className="home-indicator"></div>
-      </div>
     </div>
   );
 

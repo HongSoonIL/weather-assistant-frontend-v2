@@ -34,7 +34,7 @@
   height: 100%;
   left: 0;
   top: 0;
-  background: linear-gradient(189.6deg, #101010 51.57%, #AD82FA 143.78%);
+  background: linear-gradient(189.6deg, #101010 51.57%, #2B468E 143.78%);
   opacity: 0.75;              /* 살짝 줄여서 부드럽게 */
   backdrop-filter: blur(18px); /* blur 약간 완화 */
   z-index: 2;
@@ -107,9 +107,10 @@
   animation: scanning-pulse 1.8s infinite ease-in-out;
 }
 
+
 /* 이름만 보라색 포인트 */
-.app-container.camera .scan-message .scan-username {
-  color: #C1A0F9;
+/*.app-container.camera .scan-message .scan-username {
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -121,33 +122,33 @@
 }
 
 /* ================================
-   하단 홈 인디케이터
-   ================================ */
-
-.app-container.camera .home-indicator {
-  position: absolute;
-  width: 100%;
-  height: 23px;
-  left: 0;
-  bottom: env(safe-area-inset-bottom, 0px);
-  z-index: 10;
-}
-
-.app-container.camera .home-bar {
-  position: absolute;
-  width: 139px;
-  height: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 8px;
-  background: #FFFFFF;
-  border-radius: 100px;
-}
-
-/* ================================
    카메라 버튼 (Scanning 화면에서는 숨김)
    ================================ */
 
 .app-container.camera .camera-button {
   display: none;
+}
+
+/* Scanning 화면 뒤로가기 버튼 (Done과 동일하게) */
+.app-container.camera .header-frame {
+  position: absolute;
+  width: 100%;
+  height: 56px;
+  left: 0;
+  top: calc(env(safe-area-inset-top, 0px) + 59px);
+  z-index: 10;
+}
+
+.app-container.camera .back-arrow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+}
+
+.app-container.camera .back-arrow img {
+  width: 100%;
+  height: 100%;
 }

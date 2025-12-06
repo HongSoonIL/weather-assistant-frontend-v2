@@ -303,19 +303,19 @@ const WelcomeScreen = ({ setView, setUid }) => {   // setUid prop 추가
           <p className="persona-title-sub">Choose your Lumee Persona to begin</p>
         </div>
         <div className="persona-card-row">
-          <button className="persona-card" onClick={() => handleSelectPersona('testUser2')}>
-            <div className="persona-avatar">
-              <img src={`${process.env.PUBLIC_URL}/assets/icons/minjun.png`} alt="Minjun" />
-            </div>
-            <div className="persona-name">Minjun</div>
-            <div className="persona-desc">주말마다 자연을{'\n'}향하는 아웃도어 탐험가</div>
-          </button>
           <button className="persona-card" onClick={() => handleSelectPersona('testUser1')}>
             <div className="persona-avatar">
               <img src={`${process.env.PUBLIC_URL}/assets/icons/minseo.png`} alt="Minseo" />
             </div>
             <div className="persona-name">Minseo</div>
             <div className="persona-desc">날씨·알레르기에{'\n'}예민한 도시형 플래너</div>
+          </button>
+          <button className="persona-card" onClick={() => handleSelectPersona('testUser2')}>
+            <div className="persona-avatar">
+              <img src={`${process.env.PUBLIC_URL}/assets/icons/minjun.png`} alt="Minjun" />
+            </div>
+            <div className="persona-name">Minjun</div>
+            <div className="persona-desc">주말마다 자연을{'\n'}향하는 아웃도어 탐험가</div>
           </button>
         </div>
       </div>

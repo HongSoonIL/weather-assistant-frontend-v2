@@ -27,7 +27,7 @@
   height: 943.78px;
   left: -3.25px;
   top: -5.89px;
-  background: linear-gradient(189.6deg, #101010 51.57%, #AD82FA 143.78%);
+  background: linear-gradient(189.6deg, #101010 51.57%, #2B468E 143.78%);
   opacity: 0.8;
   backdrop-filter: blur(25px);
   z-index: 2;
@@ -82,18 +82,6 @@
   height: 100%;
 }
 
-/* 하단 홈 인디케이터 */
-.camera-done .home-indicator {
-  position: absolute;
-  width: 139px;
-  height: 5px;
-  left: calc(50% - 139px / 2 - 0.5px);
-  bottom: 8px;
-  background: #ffffff;
-  border-radius: 100px;
-  transform: matrix(-1, 0, 0, 1, 0, 0);
-  z-index: 10;
-}
 
 /* 🔥 완료 문구 (이름 + 텍스트) */
 .camera-done .scan-complete {
@@ -113,7 +101,7 @@
 
 /* 이름만 보라색 하이라이트 */
 .camera-done .scan-complete-username {
-  color: #c1a0f9;
+  color:#ffff;
 }
 
 /* 🔥 큰 사진 프리뷰 (2번째 이미지처럼 넓게) */
@@ -134,51 +122,17 @@
   z-index: 5;
 }
 
-/* 하단 원형 버튼 (일단 그대로 유지) */
+/* ✅ check.svg 버튼 영역 (이미지 경로는 JSX에서 넣기) */
 .camera-done .camera-check {
   position: absolute;
   width: 100px;
   height: 100px;
-  left: calc(50% - 100px / 2);
+  left: calc(50% - 50px); /* 중앙 정렬 */
   top: 763px;
   z-index: 5;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.camera-done .camera-check .circle {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  background: rgba(173, 130, 250, 0.5);
-  opacity: 0.5;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25),
-    inset 4px 4px 4px rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-  border-radius: 50%;
-}
-
-.camera-done .camera-check .inner-circle {
-  position: absolute;
-  width: 63.42px;
-  height: 63.42px;
-  background: rgba(173, 130, 250, 0.5);
-  opacity: 0.7;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25),
-    inset 2px 2px 2px rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-  border-radius: 50%;
-}
-
-.camera-done .camera-check .center-dot {
-  position: absolute;
-  width: 46.55px;
-  height: 46.55px;
-  background: rgba(173, 130, 250, 0.5);
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25),
-    inset 2px 2px 2px rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-  border-radius: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
