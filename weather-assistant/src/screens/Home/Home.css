@@ -395,27 +395,65 @@
 }
 
 
-/* 프로필 버튼 - 32x32 고정 크기 */
 .header-profile {
-  /* 기본 button 스타일 제거 */
-  background: none !important;
-  border: none !important;
-  padding: 0;
-  outline: none;
-  
-  /* 고정 크기 설정 */
-  width: 32px !important;         /* 가로 32px 고정 */
-  height: 32px !important;        /* 세로 32px 고정 */
-  min-width: 32px;               /* 최소 크기도 32px */
-  min-height: 32px;              /* 최소 크기도 32px */
-  max-width: 32px;               /* 최대 크기도 32px */
-  max-height: 32px;              /* 최대 크기도 32px */
-  
-  /* 원형 모양 */
-  border-radius: 50%;            /* 완전한 원 */
-  overflow: hidden;              /* 넘치는 부분 잘라내기 */
-  
+  position: relative;
+
+  /* 크기 (44px 고정) */
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 44px;
+  max-height: 44px;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  /* 살짝 어두운 유리 배경 */
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* 바깥쪽 그림자는 아주 은은하게만 */
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   cursor: pointer;
+  border: none;                    /* 실제 border는 없애고 */
+  transition: all 0.25s ease;
+}
+
+.header-profile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+
+  /* 전체적으로 균일하게 안쪽 Glow */
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),   /* 은은한 테두리 */
+    inset 0 0 8px rgba(255, 255, 255, 0.18);    /* 전체 Glow */
+
+  /* 특정 위치만 밝아지는 radial-gradient 제거!! */
+  background: transparent;
+
+  transition: 0.25s ease;
+}
+
+.header-profile:hover::before {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 0 10px rgba(255, 255, 255, 0.24);
+}
+
+.header-profile:active::before {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.38),
+    inset 0 0 14px rgba(255, 255, 255, 0.38);
 }
 
 /* 프로필 사진 - 자동 크기 조정 */
@@ -432,20 +470,21 @@
   flex-shrink: 0;                /* 줄어들지 않게 */
 }
 
-
 /* 아이콘 크기  */
 .menu-icon,
 .header-location-icon {
-  width: 24px;
-  height: 24px;
+  width: 35px;
+  height: 35px;
 }
 
+/* 프로필 이미지 */
 .profile-icon {
-  width: 32px;                 
-  height: 32px;           
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
-
-
 
 /* 날짜  */
 .date {
@@ -467,7 +506,6 @@
   
   margin: 0;
 }
-
 
 /* 기온 */
 .temperature {
@@ -592,21 +630,14 @@
   margin: 0;
 }
 
-/* FAQ 카드 컨테이너 - 헤더와 동일한 마진 적용 */
+/* FAQ 카드 컨테이너 - 슬라이더 안에서 그리드 */
 .FAQ-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: min(16px, 4vw);
-  
-  position: absolute;
-  top: calc(635px + env(safe-area-inset-top, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - min(40px, 10vw)); /* 헤더 패딩 * 2 만큼 빼기 */
-  max-width: 390px; /* 최대 너비 제한 */
-  
+  width: 100%;
   padding: 0;
-  margin: 0;
+  margin: -5px 0 0 0;   /* 🔥 위로 5px 올리기 */
 }
 
 
@@ -616,7 +647,6 @@
   width: 100%;
   height: 79px;
 }
-
 
 /* 메인 FAQ 버튼 */
 .FAQ-button {
@@ -1482,4 +1512,171 @@
     height: 18px !important;
   }
 
+}
+
+/* ===== FAQ / Calendar 슬라이더 영역 (FAQ가 있던 자리 전체) ===== */
+.bottom-slider {
+  position: absolute;
+  top: calc(635px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - min(40px, 10vw));
+  max-width: 390px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* 슬라이더 높이 고정 (점 위치 고정용) */
+  height: 190px;
+}
+
+/* 슬라이더 내부 컨텐츠 둘 다 100% 너비 */
+.bottom-slider > .FAQ-buttons,
+.bottom-slider > .calendar-section {
+  width: 100%;
+}
+
+/* 슬라이드 인디케이터 점 */
+.slider-dots {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: 6px;
+}
+
+.slider-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 0;
+  cursor: pointer;
+}
+
+.slider-dot.active {
+  width: 9px;
+  background: #ffffff;
+}
+
+/* ========== Calendar 영역 (홈 하단) ========== */
+
+/* 캘린더 전체 섹션 */
+.calendar-section {
+  width: 100%;
+  margin-top: 1px;
+}
+
+/* "December" 텍스트 */
+.calendar-month {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+/* 캘린더 카드 */
+.calendar-card {
+  width: 100%;
+  border-radius: 22px;
+  border: 0.5px solid rgba(255, 255, 255, 0.32);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 요일 줄 - 카드 상단 전체 꽉 채우기 */
+.calendar-days-row {
+  display: flex;
+  align-items: center;
+  padding: 0;  /* 양 끝 칸 넓어 보이지 않게 컨테이너 padding 제거 */
+  background: rgba(255, 255, 255, 0.0);  /* 배경 더 옅게 */
+  border-radius: 22px 22px 0 0;
+}
+
+/* 요일 텍스트 */
+.calendar-day-label {
+  flex: 1;                /* 모든 칸 동일 비율 */
+  text-align: center;
+  padding: 8px 0 6px;     /* 개별 내부 여백만 적용 */
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 200;
+  letter-spacing: 0.06em;
+  background: transparent;
+  color: #ffff;   /* 기본은 옅은 흰색 */
+}
+
+/* SUN, SAT 포인트 컬러 */
+.calendar-days-row .calendar-day-label:first-child {
+  color: rgba(238, 180, 243, 0.95);  /* SUN */
+}
+
+.calendar-days-row .calendar-day-label:last-child {
+  color: rgba(151, 245, 253, 0.95);  /* SAT */
+}
+
+/* 날짜 + 이벤트 줄 */
+.calendar-dates-row {
+  display: flex;
+  padding: 0;   /* 컨테이너 padding 제거 → 칸 균등 */
+}
+
+/* 개별 날짜 셀 */
+.calendar-date-item {
+  flex: 1;
+  min-height: 60px;
+  font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  position: relative;
+
+  padding: 8px 4px 12px;    /* 각 칸 내부 여백만 부여 */
+}
+
+/* 날짜 숫자 */
+.calendar-date-number {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  margin-left: 6px;  
+}
+
+/* 14(日), 20(土) 숫자 색 – 요일 색 따라가기 */
+.calendar-date-item:first-child .calendar-date-number {
+  color: #EEB4F3;   /* SUN 색 */
+}
+
+.calendar-date-item:last-child .calendar-date-number {
+  color: #97F5FD;   /* SAT 색 */
+}
+
+/* 이벤트 텍스트 (두 줄까지, 왼쪽 정렬) */
+.calendar-event-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10px;
+  line-height: 1.25;
+  font-weight: 300;                         /* 상대적으로 가늘게 */
+  color: #ffff;          /* 진하게 보이지 않도록 투명도 ↓ */
+  align-items: flex-start;
+  text-align: left;
+  margin-left: 5px;  
 }

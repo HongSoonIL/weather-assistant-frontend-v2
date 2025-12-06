@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Home.css';
 import { WeatherDescriptionWithIcon } from './weatherIconUtils';
 
@@ -20,17 +20,92 @@ const Home = ({
   const userProfiles = {
     'testUser1': {
       name: 'Minseo',
-      image: `${process.env.PUBLIC_URL}/assets/icons/minseo.png`,
+      image: `${process.env.PUBLIC_URL}/assets/icons/minseo_home.png`,
       greeting: 'Hello, Minseo👋'
     },
     'testUser2': {
       name: 'Minjun',
-      image: `${process.env.PUBLIC_URL}/assets/icons/minjun.png`, // 🔥 민준 이미지 추가 
+      image: `${process.env.PUBLIC_URL}/assets/icons/minjun_home.png`, // 🔥 민준 이미지 추가 
       greeting: 'Hello, Minjun👋'
     }
   };
 
   const currentUser = userProfiles[uid] || userProfiles['testUser1'];
+
+  // ===== 🔥 각 유저별 캘린더 데이터 =====
+  const calendarData = {
+    testUser1: {
+      month: 'December',
+      days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      dates: ['14', '15', '16', '17', '18', '19', '20'],
+      events: {
+        '16': ['성수', '카페 탐방'],
+        '17': ['마라톤'],
+        '20': ['결혼식'],
+      }
+    },
+    testUser2: {
+      month: 'December',
+      days: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      dates: ['14', '15', '16', '17', '18', '19', '20'],
+      events: {
+        '14': ['수원FC', '축구 직관'],
+        '17': ['가평 캠핑'],
+        '19': ['설악산', '등산'],
+      }
+    }
+  };
+
+  const currentCalendar = calendarData[uid] || calendarData['testUser1'];
+
+// ===== 🔥 FAQ / 캘린더 슬라이드 상태 =====
+const [activeSlide, setActiveSlide] = useState(0); // 0 = FAQ, 1 = Calendar
+const pointerStartXRef = useRef(null);
+
+const handlePointerDown = (e) => {
+  // 사이드 메뉴 열려 있으면 슬라이드 막기
+  if (isMenuOpen) return;
+
+  // 마우스면 왼쪽 버튼만 허용
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+  const target = e.target;
+
+  // 입력창/마이크/카메라/사이드메뉴 안에서 시작한 드래그는 무시
+  if (
+    target.closest('.footer-input') ||
+    target.closest('.side-menu') ||
+    target.closest('.menu-overlay')
+  ) {
+    pointerStartXRef.current = null;
+    return;
+  }
+
+  pointerStartXRef.current = e.clientX;
+};
+
+const handlePointerUp = (e) => {
+  if (pointerStartXRef.current === null) return;
+
+  const endX = e.clientX;
+  const diffX = endX - pointerStartXRef.current;
+
+  // 살짝 스치는 건 무시
+  if (Math.abs(diffX) < 40) {
+    pointerStartXRef.current = null;
+    return;
+  }
+
+  if (diffX < 0 && activeSlide === 0) {
+    // 왼쪽으로 드래그 → 캘린더
+    setActiveSlide(1);
+  } else if (diffX > 0 && activeSlide === 1) {
+    // 오른쪽으로 드래그 → FAQ
+    setActiveSlide(0);
+  }
+
+  pointerStartXRef.current = null;
+};
 
   // ===== 🔥 프로필 전환 함수 =====
   const switchProfile = () => {
@@ -108,6 +183,45 @@ const Home = ({
     }
   });
 
+   // ===== 4-1. FAQ 길게 누르기용 ref & 핸들러 =====
+  const longPressTimerRef = useRef(null);
+  const longPressTriggeredRef = useRef(false);
+  const LONG_PRESS_DURATION = 600; // ms
+
+  const handleFaqPressStart = (index) => {
+    // 타이머 초기화
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+    }
+    longPressTriggeredRef.current = false;
+
+    longPressTimerRef.current = setTimeout(() => {
+      longPressTriggeredRef.current = true;
+      startEditing(index); // 일정 시간 지나면 편집 모드 진입
+    }, LONG_PRESS_DURATION);
+  };
+
+  const handleFaqPressEnd = (faqText) => {
+    // 타이머 제거
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+
+    // 길게 누른 게 아니면 → 원래 기능(FAQ 전송)
+    if (!longPressTriggeredRef.current) {
+      sendFromFAQ(faqText);
+    }
+  };
+
+  const cancelLongPress = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+    longPressTriggeredRef.current = false;
+  };
+
   // ===== 5. useEffect - 로컬 스토리지 저장 =====
   useEffect(() => {
     try {
@@ -173,7 +287,10 @@ const Home = ({
 
   // ===== 10. 렌더링 =====
   return (
-    <div className="app-container">
+    <div className="app-container"
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+    >
       
       {/* ===== 사이드 메뉴 ===== */}
       {isMenuOpen && (
@@ -304,62 +421,134 @@ const Home = ({
       {/* ===== 🔥 수정된 사용자 인사 섹션 ===== */}
       <div className="user-greeting-section">
         <div className="greeting">{currentUser.greeting}</div>
-        <h1 className="main-question">What weather info do you need?</h1>
+        <h1 className="main-question">
+          {activeSlide === 0
+            ? 'What weather info do you need?'
+            : 'Check the weekly schedule'}
+        </h1>
       </div>
 
-      {/* ===== FAQ 버튼 섹션 ===== */}
-      <div className="faq-section">
-        <div className="FAQ-buttons">
-          {faqItems.map((faqText, index) => (
-            <div key={index} className="FAQ-card">
-              {editingIndex === index ? (
-                // 편집 모드
-                <div className="FAQ-edit-mode">
-                  <textarea
-                    className="FAQ-edit-input"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    autoFocus
-                  />
-                  <div className="FAQ-edit-buttons">
-                    <button className="FAQ-save-btn" onClick={saveEdit}>
-                      Save
-                    </button>
-                    <button className="FAQ-cancel-btn" onClick={cancelEdit}>
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                // 일반 모드
-                <>
-                  <button 
-                    className="FAQ-button"
-                    onClick={() => sendFromFAQ(faqText)}
-                  >
-                    <span className="FAQ-button-text">{faqText}</span>
-                  </button>
-                  <button 
-                    className="FAQ-edit-btn"
-                    onClick={() => startEditing(index)}
-                    aria-label="FAQ 수정"
-                  >
-                    <img 
-                      src={`${process.env.PUBLIC_URL}/assets/icons/edit.svg`}
-                      alt="수정"
-                      className="edit-icon"
+      {/* ===== FAQ / Calendar 슬라이더 섹션 ===== */}
+      <div
+        className="bottom-slider"
+      >
+
+        {activeSlide === 0 ? (
+          /* === 슬라이드 1 : FAQ === */
+          <div className="FAQ-buttons">
+            {faqItems.map((faqText, index) => (
+              <div key={index} className="FAQ-card">
+                {editingIndex === index ? (
+                  // 편집 모드
+                  <div className="FAQ-edit-mode">
+                    <textarea
+                      className="FAQ-edit-input"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      autoFocus
                     />
-                  </button>
-                </>
-              )}
+                    <div className="FAQ-edit-buttons">
+                      <button className="FAQ-save-btn" onClick={saveEdit}>
+                        Save
+                      </button>
+                      <button className="FAQ-cancel-btn" onClick={cancelEdit}>
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // 일반 모드
+                  <>
+                    <button 
+                      className="FAQ-button"
+
+                      onMouseDown={() => handleFaqPressStart(index)}
+                      onMouseUp={() => handleFaqPressEnd(faqText)}
+                      onMouseLeave={cancelLongPress}
+
+                      onTouchStart={() => handleFaqPressStart(index)}
+                      onTouchEnd={() => handleFaqPressEnd(faqText)}
+                      onTouchMove={cancelLongPress}
+                    >
+                      <span className="FAQ-button-text">{faqText}</span>
+                    </button>
+                    {/*
+                    <button 
+                      className="FAQ-edit-btn"
+                      onClick={() => startEditing(index)}
+                      aria-label="FAQ 수정"
+                    >
+                      <img 
+                        src={`${process.env.PUBLIC_URL}/assets/icons/edit.svg`}
+                        alt="수정"
+                        className="edit-icon"
+                      />
+                    </button>
+                    */}
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* === 슬라이드 2 : 캘린더 === */
+          <div className="calendar-section">
+            <div className="calendar-month">{currentCalendar.month}</div>
+
+            <div className="calendar-card">
+              {/* 요일 줄 */}
+              <div className="calendar-days-row">
+                {currentCalendar.days.map((day) => (
+                  <span key={day} className="calendar-day-label">
+                    {day}
+                  </span>
+                ))}
+              </div>
+
+              {/* 날짜 + 일정 줄 */}
+              <div className="calendar-dates-row">
+                {currentCalendar.dates.map((date, index) => {
+                  const eventLines = currentCalendar.events[date] || [];
+                  const isSelected = index === 6; // 토요일(20) 강조
+                  return (
+                    <div
+                      key={date}
+                      className={`calendar-date-item ${
+                        isSelected ? 'is-selected' : ''
+                      }`}
+                    >
+                      <span className="calendar-date-number">{date}</span>
+                      <div className="calendar-event-text">
+                        {eventLines.map((line, i) => (
+                          <span key={i}>{line}</span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          ))}
+          </div>
+        )}
+
+        {/* 슬라이드 인디케이터 점 */}
+        <div className="slider-dots">
+          <button
+            type="button"
+            className={`slider-dot ${activeSlide === 0 ? 'active' : ''}`}
+            onClick={() => setActiveSlide(0)}
+          />
+          <button
+            type="button"
+            className={`slider-dot ${activeSlide === 1 ? 'active' : ''}`}
+            onClick={() => setActiveSlide(1)}
+          />
         </div>
       </div>
 
+
       {/* ===== 하단 입력창 (수정됨) ===== */}
       <div className="footer-input">
-
         <div className="input-wrapper">
           {/* 2. 카메라 버튼 추가 및 setView 연결 */}
           <button className="plus-button" onClick={() => setView('camera')}>
