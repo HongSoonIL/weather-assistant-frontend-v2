@@ -54,7 +54,7 @@ const WelcomeConnect = ({ onNext, onBack }) => {
       <p className="connect-desc">
         {status === 'connected' 
           ? '이제 날씨에 따라 LED가 빛납니다.\n메인 화면으로 이동합니다.' 
-          : '블루투스로 아두이노와 연결하여\n날씨에 반응하는 LED를 경험해보세요.'}
+          : '블루투스로 Lumee와 연결하여\n날씨에 반응하는 LED를 경험해보세요.'}
       </p>
 
       {/* 버튼 영역 */}

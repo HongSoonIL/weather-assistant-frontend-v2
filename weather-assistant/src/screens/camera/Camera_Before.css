@@ -32,8 +32,8 @@
 /* 뒤로가기 버튼 (Done과 동일) */
 .app-container.camera-before .back-arrow {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   left: 20px;
   top: 16px;
   cursor: pointer;

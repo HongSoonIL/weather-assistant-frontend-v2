@@ -14,7 +14,7 @@
 ====================================== */
 .frame-header {
   position: absolute;
-  top: 60px;   /* 🔥 기존 24px → 더 아래 */
+  top: calc(env(safe-area-inset-top, 0px) + 75px);
   left: 24px;
   z-index: 30;
 }
@@ -31,8 +31,8 @@
 }
 
 .arrow-back-icon {
-  width: 35px;      /* 🔥 아이콘 크게 */
-  height: 35px;
+  width: 34px;      /* 🔥 아이콘 크게 */
+  height: 34px;
 }
 
 
@@ -42,7 +42,7 @@
 
 .onb-progress {
   position: absolute;
-  top: 123px;
+  top: 140px;
   left: 50%;
   transform: translateX(-50%);
   width: 320px;
@@ -93,7 +93,7 @@
 ====================================== */
 .onb-text {
   position: absolute;
-  top: 165px;
+  top: 180px;
   left: 32px;
   right: 32px;
   text-align: center;

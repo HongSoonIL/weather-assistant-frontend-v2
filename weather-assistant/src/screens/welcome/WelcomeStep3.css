@@ -4,7 +4,7 @@
 
 .welcome-step3-root .onb-progress {
   position: absolute;
-  top: 123px;
+  top: 140px;
   left: 50%;
   transform: translateX(-50%);
   width: 320px;
@@ -75,7 +75,7 @@
 
 .step3-text {
   position: absolute;
-  top: 165px;       /* Step3 상단 기준 위치 */
+  top: 180px;       /* Step3 상단 기준 위치 */
   left: 32px;
   right: 32px;
   text-align: center;
@@ -185,8 +185,6 @@
   }
 }
 
-
-
 /* ======================================
    버튼
 ====================================== */
@@ -208,4 +206,22 @@
   font-weight: 500;
 
   z-index: 7;
+
+  /* 🔥 FAQ 카드처럼 인터랙션 */
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20);
+  transition: all 0.25s ease;
+}
+
+/* hover – 살짝 더 밝아지고 위로 2px 떠오름 */
+.step3-start-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+  transform: translateY(-2px);
+}
+
+/* active – 다시 내려오면서 그림자 줄어듦 */
+.step3-start-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
 }
