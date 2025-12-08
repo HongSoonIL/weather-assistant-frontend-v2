@@ -233,7 +233,7 @@ const Home = ({
   const [touchEndX, setTouchEndX] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const THRESHOLD = 50;
+  const THRESHOLD = 100;
 
   const handleTouchStart = (e) => {
     setTouchStartX(e.touches[0].clientX);

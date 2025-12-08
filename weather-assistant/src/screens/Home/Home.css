@@ -1,3 +1,12 @@
+/* 홈 화면에서 텍스트 드래그/블록 선택 방지 */
+.app-container,
+.app-container * {
+  -webkit-user-select: none; /* Safari, Chrome */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE/Edge */
+  user-select: none;
+}
+
 /* ===== 사이드 메뉴 스타일 ===== */
 
 /* 메뉴 오버레이 (전체 화면 덮개) */
