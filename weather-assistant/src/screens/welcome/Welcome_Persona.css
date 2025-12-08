@@ -175,19 +175,24 @@
 /* 뒤로가기 영역 위치 조정 */
 .welcome-persona-root .frame-header {
   position: absolute;
-  top: 60px;        /* 🔥 기본 16~20px보다 아래로 */
+  top: calc(env(safe-area-inset-top, 0px) + 75px); 
   left: 24px;
   z-index: 20;
 }
 
 /* 아이콘 크기 키우기 */
 .welcome-persona-root .arrow-back-icon {
-  width: 35px;      /* 🔥 기존 20px → 더 큼 */
-  height: 35px;
+  width: 34px;      /* 🔥 기존 20px → 더 큼 */
+  height: 34px;
 }
 
-/* 아이콘 터치 영역 넓히기 (사용자 경험 ↑) */
+
 .welcome-persona-root .arrow-back {
-  padding: 8px;     /* 주변 여백 추가 */
+  width: 44px;
+  height: 44px;
+  padding: 8px;   /* 터치 영역 */
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
