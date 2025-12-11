@@ -27,6 +27,9 @@ function App() {
   const abortControllerRef = useRef(null);
   const thinkingTimerRef = useRef(null);
 
+  // 🎨 홀로그램 디스플레이 창 참조 추가
+  const hologramWindowRef = useRef(null);
+
   // 현재 화면을 추적하기 위한 state 추가 (App.js 상단에)
   const [previousView, setPreviousView] = useState('home');
 
@@ -75,29 +78,69 @@ function App() {
     );
   }, []);
 
+// 🎨 홀로그램 디스플레이 창 열기 함수
+    const openHologramDisplay = () => {
+        const win = hologramWindowRef.current;
+        // 창이 이미 열려있고 닫히지 않았으면 그대로 유지
+        if (win && !win.closed) {
+            console.log('🎨 Hologram display already open');
+            win.focus(); // 창을 앞으로 가져오기
+            return;
+        }
+        // 두 번째 모니터 위치 설정 (일반적으로 첫 번째 모니터 오른쪽)
+        const screenWidth = window.screen.width;
+        const displayWidth = 800;
+        const displayHeight = 600;
+        // 두 번째 모니터 위치 (첫 번째 모니터 너비만큼 오른쪽으로)
+        const left = screenWidth; // 두 번째 모니터 시작 위치
+        const top = 0;
+        const windowFeatures = `width=${displayWidth},height=${displayHeight},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes`;
+        // 'hologramDisplay'라는 고유한 이름으로 창 열기
+        hologramWindowRef.current = window.open(
+            'http://localhost:4000/static/videos/default.html',
+            'hologramDisplay',
+            windowFeatures
+        );
+        console.log('🎨 Hologram display opened at second monitor');
+    };
+    // 🎨 홀로그램 디스플레이 자동 오픈
+    useEffect(() => {
+        // 컴포넌트 마운트 시 홀로그램 디스플레이 열기
+        const timer = setTimeout(() => {
+            openHologramDisplay();
+        }, 1000); // 1초 후에 열기 (페이지 로드 완료 대기)
+        // 컴포넌트 언마운트 시 홀로그램 창은 닫지 않음 (유지)
+        return () => {
+            clearTimeout(timer);
+            // 홀로그램 창은 의도적으로 닫지 않음
+        };
+    }, []);
+
   // 뒤로가기 함수 - 진행 중인 요청 취소 및 완전한 상태 초기화
   const handleBackToHome = () => {
     console.log('🔙 뒤로가기 시작 - 모든 상태 초기화');
-
     // 1. 진행 중인 HTTP 요청 취소
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
       console.log('⏹️ HTTP 요청 취소됨');
     }
-
     // 2. 진행 중인 타이머 취소
     if (thinkingTimerRef.current) {
       clearTimeout(thinkingTimerRef.current);
       thinkingTimerRef.current = null;
       console.log('⏰ Thinking 타이머 취소됨');
     }
-
-    // 3. 상태 즉시 초기화 (동기적으로)
+    // 3. 🎨 홀로그램 디스플레이를 기본 영상으로 리셋 (창 닫지 않음)
+    const win = hologramWindowRef.current;
+    if (win && !win.closed) {
+      win.location.href = 'http://localhost:4000/static/videos/default.html';
+      console.log('🎨 Hologram display reset to default video');
+    }
+    // 4. 상태 즉시 초기화 (동기적으로)
     setView('home');
     setMessages([]);
     setInput('');
-
     console.log('✅ 모든 상태 초기화 완료');
   };
 
@@ -351,7 +394,6 @@ function App() {
         console.log('🎨 채팅 기반 LED 업데이트:', data.ledStatus);
         ledService.sendToArduino(data.ledStatus);
       }
-
       // "Thinking" 메시지를 실제 응답으로 교체
       setMessages(prev => {
         const newMessages = [...prev];
@@ -365,13 +407,14 @@ function App() {
           {
             type: 'bot',
             text: data.reply || '응답을 이해하지 못했어요.',
-            // 백엔드가 그래프/미세먼지 데이터를 주면 그대로 할당
             graph: data.graph || null,
             graphDate: data.graphDate || null,
-            dust: data.dust || null
+            dust: data.dust || null,
+            videoUrl: data.videoUrl || null  // 🎬 여기에 추가!
           }
         ];
       });
+
 
     } catch (error) {
       if (error.name === 'AbortError') {
