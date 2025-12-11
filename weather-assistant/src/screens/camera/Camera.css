@@ -1,0 +1,154 @@
+/* ================================
+   Camera (Scanning 화면 전용)
+   ================================ */
+
+.app-container.camera {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #091837 70.82%, #2B468E 112.23%);
+  overflow: hidden;
+  display: block;
+  padding: 0;
+}
+
+/* 흐릿한 카메라 배경 */
+.app-container.camera .background-image {
+  position: absolute;
+  width: 713px;
+  height: 950.34px;
+  left: 50%;
+  top: 3px;
+  transform: translateX(-50%);
+  background-image: url('https://placehold.co/713x950/000000/FFF?text=BG');
+  /* 실제 배경 이미지가 있으면 아래로 교체 */
+  /* background-image: url('/assets/images/camera-bg.jpg'); */
+  filter: blur(25px);
+  z-index: 1;
+}
+
+/* 어두운 그라디언트 오버레이 */
+.app-container.camera .overlay-rectangle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: linear-gradient(189.6deg, #101010 51.57%, #2B468E 143.78%);
+  opacity: 0.75;              /* 살짝 줄여서 부드럽게 */
+  backdrop-filter: blur(18px); /* blur 약간 완화 */
+  z-index: 2;
+}
+
+/* 상단 상태바 (시간 영역) */
+.app-container.camera .status-bar {
+  position: absolute;
+  width: 100%;
+  height: 59px;
+  left: 0;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 10;
+}
+
+.app-container.camera .time {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 33.96%;
+  bottom: 25.3%;
+  font-family: 'SF Pro', sans-serif;
+  font-weight: 590;
+  font-size: 17px;
+  line-height: 22px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+/* 상단 네비게이션 (뒤로가기) */
+.app-container.camera .top-nav {
+  position: absolute;
+  width: 100%;
+  height: 56px;
+  left: 0;
+  top: calc(env(safe-area-inset-top, 0px) + 59px);
+  z-index: 10;
+}
+
+.app-container.camera .back-arrow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+}
+
+.app-container.camera .back-arrow img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ================================
+   스캔 중 텍스트
+   ================================ */
+
+.app-container.camera .scan-message {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 150px;                  /* 필요하면 숫자 조절해서 위치 맞추기 */
+  text-align: center;
+  font-family: 'SUIT', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #ffffff;              /* 기본은 흰색 */
+  z-index: 10;
+  animation: scanning-pulse 1.8s infinite ease-in-out;
+}
+
+
+/* 이름만 보라색 포인트 */
+/*.app-container.camera .scan-message .scan-username {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* 깜빡이는 애니메이션 */
+@keyframes scanning-pulse {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+
+/* ================================
+   카메라 버튼 (Scanning 화면에서는 숨김)
+   ================================ */
+
+.app-container.camera .camera-button {
+  display: none;
+}
+
+/* Scanning 화면 뒤로가기 버튼 (Done과 동일하게) */
+.app-container.camera .header-frame {
+  position: absolute;
+  width: 100%;
+  height: 56px;
+  left: 0;
+  top: calc(env(safe-area-inset-top, 0px) + 59px);
+  z-index: 10;
+}
+
+.app-container.camera .back-arrow {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+}
+
+.app-container.camera .back-arrow img {
+  width: 100%;
+  height: 100%;
+}

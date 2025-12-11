@@ -1,0 +1,138 @@
+/* Camera_Done */
+.camera-done {
+  position: relative;
+  width: 430px;
+  height: 932px;
+  background: #000000;
+  overflow: hidden;
+}
+
+/* 흐릿한 배경 이미지 */
+.camera-done .background-image {
+  position: absolute;
+  width: 713px;
+  height: 950.34px;
+  left: -142px;
+  top: 3px;
+  background-image: url('https://placehold.co/713x950/000000/FFF?text=BG');
+  /* 실제로는 스캔된 이미지를 흐리게 넣으면 더 자연스러움 */
+  filter: blur(25px);
+  z-index: 1;
+}
+
+/* 그라디언트 오버레이 */
+.camera-done .gradient-overlay {
+  position: absolute;
+  width: 435.5px;
+  height: 943.78px;
+  left: -3.25px;
+  top: -5.89px;
+  background: linear-gradient(189.6deg, #101010 51.57%, #2B468E 143.78%);
+  opacity: 0.8;
+  backdrop-filter: blur(25px);
+  z-index: 2;
+}
+
+/* 상단 상태바 */
+.camera-done .status-bar {
+  position: absolute;
+  width: 430px;
+  height: 59px;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.camera-done .time {
+  position: absolute;
+  left: 38.28%;
+  right: 34.91%;
+  top: 33.96%;
+  bottom: 25.3%;
+  font-family: 'SF Pro', sans-serif;
+  font-style: normal;
+  font-weight: 590;
+  font-size: 17px;
+  line-height: 22px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* 헤더(뒤로가기) */
+.camera-done .header-frame {
+  position: absolute;
+  width: 430px;
+  height: 56px;
+  left: 0;
+  top: 59px;
+  z-index: 10;
+}
+
+.camera-done .back-arrow {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+}
+
+.camera-done .back-arrow img {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* 🔥 완료 문구 (이름 + 텍스트) */
+.camera-done .scan-complete {
+  position: absolute;
+  width: 260px;
+  left: calc(50% - 260px / 2);
+  top: 140px;
+  font-family: 'SUIT', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.4;
+  text-align: center;
+  color: #ffffff;
+  z-index: 5;
+}
+
+/* 이름만 보라색 하이라이트 */
+.camera-done .scan-complete-username {
+  color:#ffff;
+}
+
+/* 🔥 큰 사진 프리뷰 (2번째 이미지처럼 넓게) */
+.camera-done .photo-preview {
+  position: absolute;
+  width: 343px;
+  height: 430px;
+  left: calc(50% - 343px / 2);
+  top: 230px;
+  background-image: url('https://placehold.co/343x430/333/FFF?text=Scanned+Image');
+  /* 실제 스캔 이미지로 교체하면 됨 */
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 2px 2px 1px rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  border-radius: 28px;
+  z-index: 5;
+}
+
+/* ✅ check.svg 버튼 영역 (이미지 경로는 JSX에서 넣기) */
+.camera-done .camera-check {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  left: calc(50% - 50px); /* 중앙 정렬 */
+  top: 763px;
+  z-index: 5;
+  cursor: pointer;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

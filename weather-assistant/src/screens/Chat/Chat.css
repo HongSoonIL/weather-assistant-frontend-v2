@@ -69,13 +69,13 @@
 
 /* 아이콘 크기 */
 .back-icon {
-  width: 24px;
-  height: 24px;
+  width: 34px !important;
+  height: 34px !important;
 }
 
 .header-icon-placeholder {
-  width: 24px;   /* 버튼과 같은 너비 */
-  height: 24px;  /* 버튼과 같은 높이 */
+  width: 34px;   /* 버튼과 같은 너비 */
+  height: 34px;  /* 버튼과 같은 높이 */
   visibility: hidden; /* 공간은 차지하지만 보이지 않음 */
 }
 

@@ -1,3 +1,12 @@
+/* 홈 화면에서 텍스트 드래그/블록 선택 방지 */
+.app-container,
+.app-container * {
+  -webkit-user-select: none; /* Safari, Chrome */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE/Edge */
+  user-select: none;
+}
+
 /* ===== 사이드 메뉴 스타일 ===== */
 
 /* 메뉴 오버레이 (전체 화면 덮개) */
@@ -335,6 +344,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-left: 1px;
 }
 
 /* 메뉴 버튼에 마우스 올렸을 때 효과 */
@@ -397,25 +408,64 @@
 
 /* 프로필 버튼 - 32x32 고정 크기 */
 .header-profile {
-  /* 기본 button 스타일 제거 */
-  background: none !important;
-  border: none !important;
-  padding: 0;
-  outline: none;
-  
-  /* 고정 크기 설정 */
-  width: 32px !important;         /* 가로 32px 고정 */
-  height: 32px !important;        /* 세로 32px 고정 */
-  min-width: 32px;               /* 최소 크기도 32px */
-  min-height: 32px;              /* 최소 크기도 32px */
-  max-width: 32px;               /* 최대 크기도 32px */
-  max-height: 32px;              /* 최대 크기도 32px */
-  
-  /* 원형 모양 */
-  border-radius: 50%;            /* 완전한 원 */
-  overflow: hidden;              /* 넘치는 부분 잘라내기 */
-  
+  position: relative;
+
+  /* 크기 (44px 고정) */
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 44px;
+  max-height: 44px;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  /* 살짝 어두운 유리 배경 */
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* 바깥쪽 그림자는 아주 은은하게만 */
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+    border: none;                    /* 실제 border는 없애고 */
+  transition: all 0.25s ease;
+}
+
+.header-profile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+
+  /* 전체적으로 균일하게 안쪽 Glow */
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),   /* 은은한 테두리 */
+    inset 0 0 8px rgba(255, 255, 255, 0.18);    /* 전체 Glow */
+
+  /* 특정 위치만 밝아지는 radial-gradient 제거!! */
+  background: transparent;
+
+  transition: 0.25s ease;
+}
+
+.header-profile:hover::before {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 0 10px rgba(255, 255, 255, 0.24);
+}
+
+.header-profile:active::before {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.38),
+    inset 0 0 14px rgba(255, 255, 255, 0.38);
+
 }
 
 /* 프로필 사진 - 자동 크기 조정 */
@@ -432,20 +482,20 @@
   flex-shrink: 0;                /* 줄어들지 않게 */
 }
 
-
 /* 아이콘 크기  */
 .menu-icon,
 .header-location-icon {
-  width: 24px;
-  height: 24px;
+  width: 35px;
+  height: 35px;
 }
 
 .profile-icon {
-  width: 32px;                 
-  height: 32px;           
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;          
 }
-
-
 
 /* 날짜  */
 .date {
@@ -606,7 +656,7 @@
   max-width: 390px; /* 최대 너비 제한 */
   
   padding: 0;
-  margin: 0;
+  margin: -5px 0 0 0;   /* 🔥 위로 5px 올리기 */
 }
 
 
@@ -926,7 +976,9 @@
 .footer-input input {
   flex: 1;
   height: 48px;
-  padding: 13px 56px 13px 16px;
+  padding: 13px 56px 13px 48px;
+
+  text-indent: 35px;
   
   /* 모양 */
   border-radius: 71px;
@@ -1385,6 +1437,46 @@
   }
 }
 
+.plus-button {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  outline: none;
+  background: transparent;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.plus-button img {
+  width: 25px;
+  height: 25px;
+  opacity: 0.6;
+}
+
+.plus-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.plus-button:hover img {
+  opacity: 1;
+}
+
+.plus-button:active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 /* 더 작은 화면 대응 (Galaxy S8보다 작은 경우) */
 @media screen and (max-width: 320px) {
   
@@ -1439,4 +1531,328 @@
     font-size: 8px !important;
     height: 18px !important;
   }
+
+}
+
+/* =======================================
+   🔥 홈 / 캘린더 슬라이더 & 캘린더 UI
+======================================= */
+
+/* 슬라이더 바깥 래퍼 */
+.home-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;   /* 다른 페이지는 가려두기 */
+}
+
+/* 두 페이지(홈, 캘린더)를 가로로 나란히 배치 */
+.home-slider-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 200%;        /* 페이지 2개 → 200% */
+  height: 100%;
+  transition: transform 0.35s ease-out;
+}
+
+/* 각 페이지 공통 */
+.home-page {
+  position: relative;
+  flex: 0 0 50%;      /* 200% 중 절반 = 기기 한 화면 */
+  width: 50%;
+  height: 100%;
+}
+
+
+/* ===== 캘린더 페이지 ===== */
+.home-page-calendar {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* 상단 이름 Pill (Minseo / Minjun) */
+.calendar-name-pill {
+  display: none;
+}
+
+/* "December 2025" */
+.calendar-month {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Poppins', sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+/* 날짜 버튼 줄 */
+.calendar-week-row {
+  position: absolute;
+  top: 190px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - min(40px, 10vw));
+  max-width: 390px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* 개별 날짜 버튼 – 기본 상태 */
+.calendar-day {
+  width: 52px;
+  height: 65px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  cursor: pointer;
+  outline: none;
+  padding: 8px 0;
+
+  position: relative;       /* 🔥 선택 시 스케일/그라데이션용 */
+  overflow: hidden;
+
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* 선택된 날짜 – 이름 Pill이랑 같은 그라데이션 */
+.calendar-day.selected {
+  background: linear-gradient(to bottom, #97F5FD 0%, #EEB4F3 100%); /* 🔥 이름 Pill이랑 동일 */
+  border-color: transparent;
+  transform: translateY(-3px) scale(1.06);
+  box-shadow:
+    0 8px 22px rgba(151, 245, 253, 0.35),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+
+/* 선택된 날짜 안의 텍스트 색상 */
+.calendar-day.selected .calendar-day-date,
+.calendar-day.selected .calendar-day-weekday {
+  color: #091837;
+}
+
+
+/* 날짜 숫자 (14, 15, ...) */
+.calendar-day-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+/* 요일 텍스트 (SUN, MON, ...) */
+.calendar-day-weekday {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* "Today" / "Choose the day" */
+.calendar-cta {
+  position: absolute;
+  top: 285px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Poppins', sans-serif;
+  font-size: 23px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+/* ===== 하단 페이지 인디케이터 (동그라미 2개) ===== */
+.home-page-indicator {
+  position: absolute;
+  bottom: 95px; /* 입력창 위에 살짝 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  transition: all 0.2s ease;
+}
+
+.indicator-dot.active {
+  width: 9px;
+  height: 9px;
+  background: #ffffff;
+}
+
+/* =========================
+   Day Plan Card
+========================= */
+
+/* 일정 카드가 들어갈 영역 */
+.calendar-plan-wrapper {
+  position: absolute;
+  top: 340px;              /* "Today / Choose the day" 아래 */
+  left: 0;
+  width: 100%;
+  padding: 0 24px 40px;
+  box-sizing
+  : border-box;
+  display: flex;
+  justify-content: center;
+}
+
+/* 카드 전체 */
+.plan-card {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 18px 18px 22px;
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
+}
+
+/* 상단 사진 */
+.plan-card-image {
+  width: 100%;
+  height: 130px;
+  border-radius: 18px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* 태그 Pill */
+.plan-card-tag-row {
+  margin-bottom: 12px;
+}
+
+.plan-card-tag-pill {
+  display: inline-flex;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  background: linear-gradient(90deg, #97F5FD, #EEB4F3);
+  color: #091837;
+}
+
+/* 제목 + 시간 줄 */
+.plan-card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: -2px;
+}
+
+/* 서브타이틀 + ETA 줄 */
+.plan-card-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.plan-card-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.plan-card-subtitle {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.plan-card-time {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.plan-card-time-eta {
+  font-size: 12px;
+  font-weight: 600;
+  background: #1E346D;
+  /* 표준 + 웹킷 둘 다 */
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 본문 텍스트 */
+.plan-card-body {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+/* 제목/서브는 검정, 시간/ETA는 남색 계열 */
+.plan-card-title,
+.plan-card-subtitle {
+  color: #111827;
+}
+
+.plan-card-time,
+.plan-card-time-eta {
+  color: #1E346D;
+  font-weight: 600;
+}
+
+/* 일정 없을 때 – 흰 박스 없이 텍스트만 표시 */
+.plan-card-empty-text {
+  /* 크기 */
+  width: auto;
+  max-width: 460px;
+  margin: 0 auto;
+
+  /* 배경/그림자 제거 → 박스 안 보이게 */
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+
+  /* 텍스트 스타일 */
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #FFFFFF; /* 파란 배경 위에 하얀 글씨 */
+
+  /* 가운데 정렬용 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

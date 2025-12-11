@@ -1,0 +1,198 @@
+/* ============================================
+   Camera Cautions Screen (카메라 주의사항 화면)
+============================================ */
+
+/* 전체 컨테이너 */
+.app-container.camera-cautions {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  /* 홈 화면이랑 같은 배경 그라데이션 */
+  background: linear-gradient(to bottom, #091837 0%, #091837 50%, #1F366F 100%);
+
+  padding: 0 !important;
+}
+
+/* 상단 상태바 */
+.app-container.camera-cautions .camera-status-bar {
+  position: absolute;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 기존 header 숨기기 (안 쓰니까) */
+.app-container.camera-cautions .camera-header {
+  display: none;
+}
+
+/* ============================
+   컨텐츠 래퍼
+============================ */
+.app-container.camera-cautions .camera-sheet {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: transparent;
+  border-radius: 0;
+
+  /* 🔽 전체를 조금 아래로 내림 */
+  padding: calc(env(safe-area-inset-top, 0px) + 150px) 24px 96px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  box-shadow: none;
+  z-index: 4;
+}
+
+/* 닫기 버튼(X) – 좌상단 */
+.app-container.camera-cautions .camera-sheet-close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 75px);
+  right: 25px;
+
+  /* 🔽 원형 배경/테두리 제거 */
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 30px;  /* X 조금 더 선명하게 */
+  line-height: 1;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* 제목 블록 */
+.app-container.camera-cautions .camera-sheet-title {
+  margin-top: 0px;          /* 🔽 기본보다 조금 내려서 */
+  margin-bottom: 22px;
+  font-family: 'SUIT', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.45;
+  color: #ffffff;
+}
+
+/* 제목 하이라이트 그라데이션 (두 줄 모두 사용) */
+.app-container.camera-cautions .camera-sheet-title-highlight {
+  display: inline-block;
+  background: linear-gradient(90deg, #97F5FD 0%, #EEB4F3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 설명 텍스트 */
+.app-container.camera-cautions .camera-sheet-description {
+  margin-bottom: 60px;
+  text-align: center;
+  font-family: 'SUIT', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 300;  
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============================
+   안내 카드 (FAQ 카드 느낌)
+============================ */
+.app-container.camera-cautions .camera-tip-card {
+  width: 100%;
+  max-width: 355px;
+
+  /* 🔼 세로를 조금 더 길게 */
+  min-height: 95px;
+
+  padding: 18px 20px;
+  margin-bottom: 38px;
+
+  /* 홈 FAQ 카드와 비슷한 글래스 스타일 */
+  border-radius: 16px;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.18);
+
+  font-family: 'SUIT', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 14px; 
+  font-weight: 100;
+  line-height: 1.7;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ============================
+   다음으로 버튼 - 위치 809px에 고정
+============================ */
+.app-container.camera-cautions .camera-sheet-confirm {
+  position: absolute;
+  top: 825px; /* ← ⭐ 원하는 정확한 위치 */
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 90%;
+  max-width: 380px;
+  height: 56px;
+
+  border-radius: 999px;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
+
+  font-family: 'SUIT', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 100;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+}
+
+/* hover / active / disabled 그대로 유지 */
+.app-container.camera-cautions .camera-sheet-confirm:hover:enabled {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.28);
+  transform: translateX(-50%) translateY(-1px);
+}
+
+.app-container.camera-cautions .camera-sheet-confirm:active:enabled {
+  transform: translateX(-50%) translateY(0);
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.22);
+}
+
+.app-container.camera-cautions .camera-sheet-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

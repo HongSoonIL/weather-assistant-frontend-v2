@@ -1,0 +1,90 @@
+/* ==================== Camera Before Screen ==================== */
+
+.app-container.camera-before {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #091837 70.82%, #2B468E 112.23%);
+  overflow: hidden;
+  display: block;
+  padding: 0 !important;
+}
+
+/* 상태바 */
+.app-container.camera-before .status-bar {
+  position: absolute;
+  height: 59px;
+  top: env(safe-area-inset-top, 0px);
+  width: 100%;
+  z-index: 10;
+}
+
+/* 헤더 (Done과 동일하게) */
+.app-container.camera-before .header-frame {
+  position: absolute;
+  width: 430px;          /* 폰 프레임 기준이면 430px, 아니면 100%로 바꿔도 됨 */
+  height: 56px;
+  left: 0;
+  top: 59px;
+  z-index: 10;
+}
+
+/* 뒤로가기 버튼 (Done과 동일) */
+.app-container.camera-before .back-arrow {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  left: 20px;
+  top: 16px;
+  cursor: pointer;
+}
+
+.app-container.camera-before .back-arrow img {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* 배경 (실시간 스트림) */
+.app-container.camera-before .background-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  /* JS에서 <img> 태그가 들어오므로 배경 이미지는 none 처리 */
+}
+
+/* 오버레이 */
+.app-container.camera-before .overlay-rectangle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: transparent;
+  opacity: 0.4;
+  z-index: 2;
+  pointer-events: none; /* 클릭 통과 */
+}
+
+/* 촬영 버튼 */
+.app-container.camera-before .camera-button {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 60px);
+  z-index: 20;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-container.camera-before .camera-button-icon {
+  width: 100%;
+  height: 100%;
+}
